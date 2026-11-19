@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Надходження</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* Той самий стиль, що й на головній: старий папір, чорнило, латунь, сургуч */
+:root{
+  --desk:#e6d6b0; --desk-warm:#efe3c6; --paper:#f4ecdd; --card:#fbf6ea; --manila:#f4ecdd; --manila-edge:#d9c088; --tape:#e8d4a0;
+  --ink:#241c12; --ink-soft:#5e4e36; --muted:#7d6d52; --brass:#c9a15a; --brass-dk:#7a5c26; --wax:#c8372d; --red:#b02e25; --ok:#3f5f2a;
+  --grid:rgba(36,28,18,.12); --axis:rgba(36,28,18,.4);
+  --shadow:0 1px 0 rgba(36,28,18,.12), 0 12px 26px rgba(70,45,15,.28);
+  --body:"IBM Plex Sans", system-ui, sans-serif; --head:"Playfair Display", Georgia, serif; --code:"IBM Plex Mono", ui-monospace, monospace;
+  /* серії: джерела надходжень і рахунки (фіксований порядок) */
+  --s1:#2f4a6b; --s2:#c8372d; --s3:#b8892e; --s4:#56603c; --s5:#8a7f6c;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0; color:var(--ink); font:16px/1.5 var(--body); overflow-x:hidden;
+  background:radial-gradient(ellipse 110% 60% at 50% 0%, rgba(201,161,90,.10), transparent 70%),
+    radial-gradient(rgba(36,28,18,.05) 1px, transparent 1.6px) 0 0/7px 7px, linear-gradient(var(--desk-warm), var(--desk) 40%), var(--desk)}
+.wrap{max-width:1000px; margin:0 auto; padding:28px 16px 72px}
+.paper{background:var(--paper); box-shadow:var(--shadow), inset 0 0 0 1px rgba(36,28,18,.08); border-radius:2px}
+button{font:inherit; color:inherit}
+.back{display:inline-block; padding:7px 15px; border:1.5px solid var(--ink); border-radius:999px; background:var(--card);
+  color:var(--ink); font:600 14px var(--body); text-decoration:none}
+.back:hover{background:var(--ink); color:var(--card)}
+.back:focus-visible, .lang button:focus-visible, .priv:focus-visible, .chip:focus-visible, summary:focus-visible{outline:3px solid var(--wax); outline-offset:2px}
+.topbar{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap}
+.tools{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+.lang{display:inline-flex; border:1.5px solid var(--ink); border-radius:999px; overflow:hidden; font:600 12px var(--body); background:var(--card)}
+.lang button{border:0; background:transparent; color:var(--ink); padding:6px 12px; cursor:pointer; letter-spacing:.08em; font:inherit}
+.lang button[aria-pressed="true"]{background:var(--ink); color:var(--card)}
+.priv{display:inline-flex; align-items:center; gap:8px; border:1.5px solid var(--ink); background:var(--card); border-radius:999px; padding:4px 13px 4px 5px; cursor:pointer; font:600 13px var(--body)}
+.priv .knob{width:32px; height:18px; border-radius:999px; background:rgba(36,28,18,.2); position:relative; transition:background .2s}
+.priv .knob::after{content:""; position:absolute; top:2px; left:2px; width:14px; height:14px; border-radius:50%; background:var(--card); box-shadow:0 1px 2px rgba(0,0,0,.3); transition:transform .2s}
+.priv[aria-pressed="true"] .knob{background:var(--wax)}
+.priv[aria-pressed="true"] .knob::after{transform:translateX(14px)}
+.tw{font-family:var(--code); letter-spacing:.02em; color:var(--ink-soft)}
+
+/* обкладинка */
+.folder{position:relative; margin-top:44px; padding:30px clamp(18px,4vw,40px) 28px; border-radius:2px 12px 2px 2px; box-shadow:var(--shadow);
+  border-bottom:6px solid var(--manila-edge);
+  background:radial-gradient(ellipse at 80% 40%, rgba(255,255,255,.35), transparent 60%), repeating-linear-gradient(0deg, rgba(36,28,18,.018) 0 2px, transparent 2px 4px), var(--manila)}
+.folder::before{content:""; position:absolute; top:-24px; left:26px; width:200px; height:26px; background:var(--manila); border-radius:12px 12px 0 0}
+.case-no{font:600 13px var(--body); letter-spacing:.14em; text-transform:uppercase; color:var(--brass-dk)}
+.folder h1{margin:10px 0 12px; font:700 clamp(34px,6.4vw,60px)/1.04 var(--head); letter-spacing:-.015em; max-width:13em}
+.folder p{margin:0; max-width:40em; color:var(--ink-soft); font-size:clamp(16px,2.2vw,18px)}
+.stamp{position:absolute; top:26px; right:26px; font:700 15px/1 var(--body); letter-spacing:.16em; text-transform:uppercase; color:var(--ok);
+  border:3px double var(--ok); padding:8px 12px 6px; border-radius:3px; opacity:.85; transform:rotate(8deg); mix-blend-mode:multiply}
+.facts{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px 22px; margin:26px 0 0}
+.facts div{border-top:1.5px solid rgba(36,28,18,.3); padding-top:8px; min-width:0}
+.facts dt{font:600 12px/1.3 var(--body); letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft)}
+.facts dd{margin:4px 0 0; font:700 clamp(24px,3.6vw,32px)/1.1 var(--head); font-variant-numeric:tabular-nums}
+.facts dd small{display:block; margin-top:4px; font:400 13px/1.35 var(--body); color:var(--ink-soft)}
+
+/* розділи */
+main{counter-reset:exhibit}
+.section{margin-top:60px; counter-increment:exhibit}
+.tape{margin:0 0 6px; padding:0 0 12px; font:700 clamp(26px,4.4vw,38px)/1.08 var(--head); letter-spacing:-.01em; border-bottom:1px solid rgba(36,28,18,.28)}
+.tape::before{content:"№ " counter(exhibit, decimal-leading-zero); display:block; margin-bottom:10px; font:600 12px/1 var(--body); letter-spacing:.16em; color:var(--brass-dk)}
+.hint{display:block; margin:8px 0 22px; color:var(--ink-soft); max-width:46em}
+.sheet{position:relative; padding:22px clamp(12px,3vw,28px) 20px}
+
+/* легенда і графіки */
+.legend{display:flex; flex-wrap:wrap; gap:6px 18px; margin:0 0 14px; padding:0; list-style:none; font-size:14px; color:var(--ink-soft)}
+.legend li{display:inline-flex; align-items:center; gap:7px}
+.legend i{width:12px; height:12px; border-radius:3px; display:inline-block}
+.legend .hatch{background:repeating-linear-gradient(135deg, rgba(36,28,18,.35) 0 2px, transparent 2px 5px); border:1px solid rgba(36,28,18,.35)}
+.chart{position:relative}
+.chart svg{display:block; width:100%; height:auto; overflow:visible}
+.chart text{font-family:var(--body); fill:var(--ink-soft); font-size:12px}
+.chart .total{fill:var(--ink); font-weight:600; font-size:12.5px}
+.chart .gridline{stroke:var(--grid); stroke-width:1}
+.chart .zero{stroke:var(--axis); stroke-width:1}
+.chart .hit{fill:transparent; cursor:default}
+.chart .col.dim{opacity:.35}
+.tip{position:absolute; z-index:5; pointer-events:none; min-width:190px; max-width:260px; padding:10px 12px; background:var(--card); color:var(--ink);
+  border:1px solid rgba(36,28,18,.25); border-radius:4px; box-shadow:0 8px 20px rgba(70,45,15,.25); font-size:13.5px; line-height:1.4; opacity:0; transition:opacity .12s}
+.tip.on{opacity:1}
+.tip b{display:block; font:700 15px/1.2 var(--head); margin-bottom:6px}
+.tip .r{display:flex; justify-content:space-between; gap:14px; align-items:center}
+.tip .r span:first-child{display:inline-flex; align-items:center; gap:6px; color:var(--ink-soft)}
+.tip .r i{width:9px; height:9px; border-radius:2px; display:inline-block}
+.tip .r.sum{border-top:1px solid rgba(36,28,18,.2); margin-top:5px; padding-top:5px; font-weight:600}
+.tip .r.sum span:first-child{color:var(--ink)}
+.tip .note{margin-top:6px; color:var(--red); font-size:12.5px}
+.num{font-variant-numeric:tabular-nums; white-space:nowrap}
+
+details.table{margin-top:14px}
+details.table summary{cursor:pointer; color:var(--brass-dk); font-weight:600; font-size:14px; width:max-content}
+.tbl-wrap{overflow-x:auto; -webkit-overflow-scrolling:touch; margin-top:10px}
+table{border-collapse:collapse; width:100%; font-size:14px; min-width:520px}
+th, td{padding:7px 10px; text-align:right; border-bottom:1px solid var(--grid); white-space:nowrap; font-variant-numeric:tabular-nums}
+th:first-child, td:first-child{text-align:left}
+thead th{font-weight:600; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); border-bottom:1.5px solid rgba(36,28,18,.35)}
+tfoot td{font-weight:700; border-top:1.5px solid rgba(36,28,18,.35); border-bottom:0}
+td.na{color:var(--muted)}
+
+/* відкладено: рядки-лінійки */
+.saverows{list-style:none; margin:0; padding:0}
+.saverow{display:grid; grid-template-columns:minmax(92px,1.1fr) minmax(0,3fr) minmax(70px,auto); gap:6px 16px; align-items:center; padding:12px 0; border-bottom:1px dashed rgba(36,28,18,.22)}
+.saverow:last-child{border-bottom:0}
+.saverow .mo{font:700 18px/1.15 var(--head)}
+.saverow .mo small{display:block; font:400 12.5px/1.3 var(--body); color:var(--ink-soft); margin-top:2px}
+.meter{position:relative; height:14px; background:rgba(36,28,18,.07); border-radius:4px}
+.meter .fill{position:absolute; top:0; bottom:0; left:0; border-radius:4px; background:var(--brass-dk)}
+.meter .fill.approx{background:repeating-linear-gradient(135deg, var(--brass-dk) 0 4px, rgba(122,92,38,.55) 4px 7px)}
+.meter .fill.neg{background:var(--red)}
+.meter .avg{position:absolute; top:-5px; bottom:-5px; width:0; border-left:2px dashed var(--ink)}
+.saverow .sub{grid-column:2; font-size:13px; color:var(--ink-soft); margin-top:-2px}
+.saverow .pct{font:700 22px/1 var(--head); text-align:right; font-variant-numeric:tabular-nums}
+.saverow .pct.neg{color:var(--red)}
+.saverow .pct.na{font:500 14px var(--body); color:var(--muted)}
+.avg-key{display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink-soft); margin:0 0 6px}
+.avg-key i{display:inline-block; width:0; height:14px; border-left:2px dashed var(--ink)}
+
+.inv-sum{margin:0 0 16px; font-size:15px; color:var(--ink-soft); max-width:46em}
+.inv-sum b{color:var(--ink); font-variant-numeric:tabular-nums}
+
+/* журнал */
+.chips{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px}
+.chip{border:1.5px solid var(--ink); background:var(--card); border-radius:999px; padding:4px 13px; cursor:pointer; font:600 13.5px var(--body)}
+.chip[aria-pressed="true"]{background:var(--ink); color:var(--card)}
+.log{list-style:none; margin:0; padding:0}
+.log li{display:grid; grid-template-columns:76px minmax(0,1fr) auto; gap:4px 14px; align-items:baseline; padding:9px 0; border-bottom:1px solid var(--grid)}
+.log .d{font:500 13px var(--code); color:var(--ink-soft)}
+.log .w{min-width:0}
+.log .w b{font-weight:600; display:inline-flex; align-items:center; gap:7px}
+.log .w b i{width:9px; height:9px; border-radius:2px; display:inline-block; flex:none}
+.log .w span{display:block; font-size:13px; color:var(--ink-soft); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.log .a{font-weight:600; text-align:right}
+.log .a.out{color:var(--ink-soft)}
+.more{margin-top:12px; border:1.5px solid var(--ink); background:var(--card); border-radius:999px; padding:6px 16px; cursor:pointer; font:600 14px var(--body)}
+
+/* нотатки */
+.notes{display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:30px 24px}
+.note{position:relative; margin:0; padding:24px 20px 20px; transform:rotate(var(--tilt,0deg)); filter:drop-shadow(0 5px 6px rgba(70,45,15,.3)); isolation:isolate}
+.note::before{content:""; position:absolute; inset:0; z-index:-1; background-color:#f1e6cb;
+  background-image:repeating-linear-gradient(to bottom, transparent 0 21px, rgba(70,110,170,.08) 21px 22px);
+  clip-path:polygon(0 1%,18% 0,41% 1.4%,66% 0,100% .8%,99% 22%,100% 48%,98.6% 74%,100% 96%,84% 99%,70% 96.5%,55% 100%,38% 97%,22% 99.5%,7% 96.8%,0 99%,1.6% 70%,0 40%,1.2% 16%)}
+.note::after{content:""; position:absolute; top:-7px; left:50%; width:16px; height:16px; margin-left:-8px; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #e0574b, var(--wax) 55%, #7d1f18); box-shadow:0 3px 4px rgba(0,0,0,.4)}
+.note h3{margin:0 0 6px; font:700 20px/1.15 var(--head)}
+.note p{margin:0; font-size:14.5px; line-height:1.5}
+.note.warn h3{color:var(--red)}
+footer{margin-top:60px; text-align:center; font:13px var(--code); color:var(--ink-soft)}
+@media (max-width:700px){
+  .stamp{position:static; display:inline-block; margin-top:14px; transform:rotate(-4deg)}
+  .saverow{grid-template-columns:minmax(0,1fr) auto}
+  .saverow .bar{grid-column:1 / -1; order:3}
+  .saverow .sub{grid-column:1 / -1; order:4}
+  .log li{grid-template-columns:minmax(0,1fr) auto}
+  .log .d{grid-column:1 / -1}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html" data-i18n="back"></a>
+    <div class="tools">
+      <button class="priv" id="priv" aria-pressed="false"><span class="knob" aria-hidden="true"></span><span data-i18n="priv"></span></button>
+      <div class="lang" role="group" aria-label="Мова / Language"><button data-lang="uk" lang="uk">UA</button><button data-lang="en" lang="en">EN</button></div>
+    </div>
+  </div>
+
+  <header class="folder">
+    <div class="case-no" data-i18n="caseNo"></div>
+    <h1 data-i18n="title"></h1>
+    <p data-i18n="lead"></p>
+    <dl class="facts" id="facts"></dl>
+    <span class="stamp" data-i18n="stamp"></span>
+  </header>
+
+  <section class="section" aria-labelledby="h-in">
+    <h2 class="tape" id="h-in" data-i18n="hIn"></h2>
+    <span class="hint" data-i18n="hintIn"></span>
+    <div class="sheet paper">
+      <ul class="legend" id="legIn"></ul>
+      <div class="chart" id="chartIn"></div>
+      <details class="table"><summary data-i18n="asTable"></summary><div class="tbl-wrap" id="tblIn"></div></details>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="h-save">
+    <h2 class="tape" id="h-save" data-i18n="hSave"></h2>
+    <span class="hint" data-i18n="hintSave"></span>
+    <div class="sheet paper">
+      <p class="avg-key" id="avgKey"></p>
+      <ul class="saverows" id="saveRows"></ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="h-inv">
+    <h2 class="tape" id="h-inv" data-i18n="hInv"></h2>
+    <span class="hint" data-i18n="hintInv"></span>
+    <div class="sheet paper">
+      <p class="inv-sum" id="invSum"></p>
+      <ul class="legend" id="legInv"></ul>
+      <div class="chart" id="chartInv"></div>
+      <details class="table"><summary data-i18n="asTable"></summary><div class="tbl-wrap" id="tblInv"></div></details>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="h-bal">
+    <h2 class="tape" id="h-bal" data-i18n="hBal"></h2>
+    <span class="hint" data-i18n="hintBal"></span>
+    <div class="sheet paper">
+      <ul class="legend" id="legBal"></ul>
+      <div class="chart" id="chartBal"></div>
+      <details class="table"><summary data-i18n="asTable"></summary><div class="tbl-wrap" id="tblBal"></div></details>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="h-log">
+    <h2 class="tape" id="h-log" data-i18n="hLog"></h2>
+    <span class="hint" data-i18n="hintLog"></span>
+    <div class="sheet paper">
+      <div class="chips" id="logChips"></div>
+      <ul class="log" id="log"></ul>
+      <button class="more" id="more" hidden data-i18n="more"></button>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="h-how">
+    <h2 class="tape" id="h-how" data-i18n="hHow"></h2>
+    <span class="hint" data-i18n="hintHow"></span>
+    <div class="notes" id="notes"></div>
+  </section>
+
+  <footer id="footer"></footer>
+</main>
+<div class="tip" id="tip" role="tooltip"></div>
+
+<script>
+const D = {"owner": "Міс Марпл", "generated": "2026-11-18 21:56", "months": [{"m": "2026-06", "income": {"Відсотки й кешбек": 7.97, "Зарплата": 1560.0, "Перекази від людей": 25.72}, "toSav": 250.0, "ownIn": 0.0, "delta": 303.1300000000001, "invested": 80.0, "invest": {"TFSA": 80.0}, "saved": 383.13, "method": "exact", "balance": {"Основний рахунок": {"v": 1568.91, "asof": "2026-06-30", "exact": true}, "Ощадний рахунок": {"v": 930.96, "asof": "2026-06-30", "exact": true}, "Рахунок для витрат": {"v": 93.26, "asof": "2026-06-30", "exact": true}}, "full": {"Основний рахунок": true, "Ощадний рахунок": true, "Рахунок для витрат": true}}, {"m": "2026-07", "income": {"Відсотки й кешбек": 4.78, "Зарплата": 1560.0, "Страхові виплати": 31.48}, "toSav": 200.0, "ownIn": 0.0, "delta": 60.34999999999991, "invested": 120.0, "invest": {"TFSA": 120.0}, "saved": 180.35, "method": "exact", "balance": {"Основний рахунок": {"v": 1630.17, "asof": "2026-07-31", "exact": true}, "Ощадний рахунок": {"v": 930.8, "asof": "2026-07-31", "exact": true}, "Рахунок для витрат": {"v": 92.51, "asof": "2026-07-31", "exact": true}}, "full": {"Основний рахунок": true, "Ощадний рахунок": true, "Рахунок для витрат": true}}, {"m": "2026-08", "income": {"Відсотки й кешбек": 4.64, "Зарплата": 1560.0, "Перекази від людей": 25.34}, "toSav": 250.0, "ownIn": 0.0, "delta": 135.07999999999993, "invested": 120.0, "invest": {"TFSA": 120.0}, "saved": 255.08, "method": "exact", "balance": {"Основний рахунок": {"v": 1704.39, "asof": "2026-08-31", "exact": true}, "Ощадний рахунок": {"v": 989.71, "asof": "2026-08-31", "exact": true}, "Рахунок для витрат": {"v": 94.46, "asof": "2026-08-31", "exact": true}}, "full": {"Основний рахунок": true, "Ощадний рахунок": true, "Рахунок для витрат": true}}, {"m": "2026-09", "income": {"Відсотки й кешбек": 8.15, "Зарплата": 1560.0, "Страхові виплати": 49.62}, "toSav": 250.0, "ownIn": 0.0, "delta": 293.73, "invested": 100.0, "invest": {"TFSA": 100.0}, "saved": 393.73, "method": "exact", "balance": {"Основний рахунок": {"v": 1903.86, "asof": "2026-09-30", "exact": true}, "Ощадний рахунок": {"v": 1088.08, "asof": "2026-09-30", "exact": true}, "Рахунок для витрат": {"v": 90.35, "asof": "2026-09-30", "exact": true}}, "full": {"Основний рахунок": true, "Ощадний рахунок": true, "Рахунок для витрат": true}}, {"m": "2026-10", "income": {"Відсотки й кешбек": 7.84, "Зарплата": 1560.0, "Перекази від людей": 29.57}, "toSav": 150.0, "ownIn": 0.0, "delta": 154.5300000000002, "invested": 120.0, "invest": {"TFSA": 120.0}, "saved": 274.53, "method": "exact", "balance": {"Основний рахунок": {"v": 2104.18, "asof": "2026-10-31", "exact": true}, "Ощадний рахунок": {"v": 1046.88, "asof": "2026-10-31", "exact": true}, "Рахунок для витрат": {"v": 85.76, "asof": "2026-10-31", "exact": true}}, "full": {"Основний рахунок": true, "Ощадний рахунок": true, "Рахунок для витрат": true}}], "flows": [{"d": "2026-10-31", "acc": "Рахунок для витрат", "desc": "Cash back", "a": 4.3, "k": "income", "src": "Відсотки й кешбек"}, {"d": "2026-10-31", "acc": "Ощадний рахунок", "desc": "Interest", "a": 3.54, "k": "income", "src": "Відсотки й кешбек"}, {"d": "2026-10-31", "acc": "Основний рахунок", "desc": "NORTHWIND LTD PAY", "a": 780.0, "k": "income", "src": "Зарплата"}, {"d": "2026-10-20", "acc": "Ощадний рахунок", "desc": "Transfer to TFSA", "a": 120.0, "k": "invest", "src": "Інвестиції"}, {"d": "2026-10-17", "acc": "Ощадний рахунок", "desc": "Deposit from main account", "a": 150.0, "k": "savings_in", "src": "З основного рахунку"}, {"d": "2026-10-16", "acc": "Основний рахунок", "desc": "Transfer to savings", "a": 150.0, "k": "saving", "src": "На ощадний рахунок"}, {"d": "2026-10-15", "acc": "Основний рахунок", "desc": "NORTHWIND LTD PAY", "a": 780.0, "k": "income", "src": "Зарплата"}, {"d": "2026-10-11", "acc": "Основний рахунок", "desc": "E-TRANSFER ***K2P", "a": 29.57, "k": "income", "src": "Перекази від людей"}, {"d": "2026-09-30", "acc": "Рахунок для витрат", "desc": "Cash back", "a": 4.62, "k": "income", "src": "Відсотки й кешбек"}, {"d": "2026-09-30", "acc": "Ощадний рахунок", "desc": "Interest", "a": 3.53, "k": "income", "src": "Відсотки й кешбек"}, {"d": "2026-09-30", "acc": "Основний рахунок", "desc": "NORTHWIND LTD PAY", "a": 780.0, "k": "income", "src": "Зарплата"}, {"d": "2026-09-22", "acc": "Основний рахунок", "desc": "HEALTH INSURANCE CLAIM", "a": 49.62, "k": "income", "src": "Страхові виплати"}, {"d": "2026-09-20", "acc": "Ощадний рахунок", "desc": "Transfer to TFSA", "a": 100.0, "k": "invest", "src": "Інвестиції"}, {"d": "2026-09-17", "acc": "Ощадний рахунок", "desc": "Deposit from main account", "a": 250.0, "k": "savings_in", "src": "З основного рахунку"}, {"d": "2026-09-16", "acc": "Основний рахунок", "desc": "Transfer to savings", "a": 250.0, "k": "saving", "src": "На ощадний рахунок"}, {"d": "2026-09-15", "acc": "Основний рахунок", "desc": "NORTHWIND LTD PAY", "a": 780.0, "k": "income", "src": "Зарплата"}, {"d": "2026-08-31", "acc": "Рахунок для витрат", "desc": "Cash back", "a": 3.6, "k": "income", "src": "Відсотки й кешбек"}, {"d": "2026-08-31", "acc": "Ощадний рахунок", "desc": "Interest", "a": 1.04, "k": "income", "src": "Відсотки й кешбек"}, {"d": "2026-08-31", "acc": "Основний рахунок", "desc": "NORTHWIND LTD PAY", "a": 780.0, "k": "income", "src": "Зарплата"}, {"d": "2026-08-20", "acc": "Ощадний рахунок", "desc": "Transfer to TFSA", "a": 120.0, "k": "invest", "src": "Інвестиції"}, {"d": "2026-08-17", "acc": "Ощадний рахунок", "desc": "Deposit from main account", "a": 250.0, "k": "savings_in", "src": "З основного рахунку"}, {"d": "2026-08-16", "acc": "Основний рахунок", "desc": "Transfer to savings", "a": 250.0, "k": "saving", "src": "На ощадний рахунок"}, {"d": "2026-08-15", "acc": "Основний рахунок", "desc": "NORTHWIND LTD PAY", "a": 780.0, "k": "income", "src": "Зарплата"}, {"d": "2026-08-11", "acc": "Основний рахунок", "desc": "E-TRANSFER ***K2P", "a": 25.34, "k": "income", "src": "Перекази від людей"}, {"d": "2026-07-31", "acc": "Рахунок для витрат", "desc": "Cash back", "a": 2.53, "k": "income", "src": "Відсотки й кешбек"}, {"d": "2026-07-31", "acc": "Ощадний рахунок", "desc": "Interest", "a": 2.25, "k": "income", "src": "Відсотки й кешбек"}, {"d": "2026-07-31", "acc": "Основний рахунок", "desc": "NORTHWIND LTD PAY", "a": 780.0, "k": "income", "src": "Зарплата"}, {"d": "2026-07-22", "acc": "Основний рахунок", "desc": "HEALTH INSURANCE CLAIM", "a": 31.48, "k": "income", "src": "Страхові виплати"}, {"d": "2026-07-20", "acc": "Ощадний рахунок", "desc": "Transfer to TFSA", "a": 120.0, "k": "invest", "src": "Інвестиції"}, {"d": "2026-07-17", "acc": "Ощадний рахунок", "desc": "Deposit from main account", "a": 200.0, "k": "savings_in", "src": "З основного рахунку"}, {"d": "2026-07-16", "acc": "Основний рахунок", "desc": "Transfer to savings", "a": 200.0, "k": "saving", "src": "На ощадний рахунок"}, {"d": "2026-07-15", "acc": "Основний рахунок", "desc": "NORTHWIND LTD PAY", "a": 780.0, "k": "income", "src": "Зарплата"}, {"d": "2026-06-30", "acc": "Рахунок для витрат", "desc": "Cash back", "a": 4.16, "k": "income", "src": "Відсотки й кешбек"}, {"d": "2026-06-30", "acc": "Ощадний рахунок", "desc": "Interest", "a": 3.81, "k": "income", "src": "Відсотки й кешбек"}, {"d": "2026-06-30", "acc": "Основний рахунок", "desc": "NORTHWIND LTD PAY", "a": 780.0, "k": "income", "src": "Зарплата"}, {"d": "2026-06-20", "acc": "Ощадний рахунок", "desc": "Transfer to TFSA", "a": 80.0, "k": "invest", "src": "Інвестиції"}, {"d": "2026-06-17", "acc": "Ощадний рахунок", "desc": "Deposit from main account", "a": 250.0, "k": "savings_in", "src": "З основного рахунку"}, {"d": "2026-06-16", "acc": "Основний рахунок", "desc": "Transfer to savings", "a": 250.0, "k": "saving", "src": "На ощадний рахунок"}, {"d": "2026-06-15", "acc": "Основний рахунок", "desc": "NORTHWIND LTD PAY", "a": 780.0, "k": "income", "src": "Зарплата"}, {"d": "2026-06-11", "acc": "Основний рахунок", "desc": "E-TRANSFER ***K2P", "a": 25.72, "k": "income", "src": "Перекази від людей"}], "accounts": ["Основний рахунок", "Ощадний рахунок", "Рахунок для витрат"], "main": "Основний рахунок", "savings": "Ощадний рахунок"};
+const S = {lang:'uk', priv:false, log:'income', shown:25};
+try { S.lang = localStorage.getItem('lang') === 'en' ? 'en' : 'uk'; S.priv = localStorage.getItem('privacy') === '1'; } catch {}
+
+const SOURCES = ['Зарплата', 'Страхові виплати', 'Перекази від людей', 'Відсотки й кешбек', 'Інше'];
+const SRC_C = {'Зарплата':'var(--s1)', 'Страхові виплати':'var(--s2)', 'Перекази від людей':'var(--s3)', 'Відсотки й кешбек':'var(--s4)', 'Інше':'var(--s5)'};
+const INV = ['Non-registered', 'RRSP', 'TFSA', 'FHSA', 'direct', 'unknown'];
+const INV_C = {'Non-registered':'var(--s1)', 'RRSP':'var(--s2)', 'TFSA':'var(--s4)', 'FHSA':'var(--s5)', 'direct':'var(--s3)', 'unknown':'var(--muted)'};
+const ACC_PAL = ['var(--ok)', 'var(--s1)', 'var(--s3)', 'var(--s2)', 'var(--s4)'];
+const accColor = k => ACC_PAL[Math.max(0, D.accounts.indexOf(k)) % ACC_PAL.length];
+// назви рахунків з config.py — англійською, якщо це стандартні назви
+const ACC_EN = {'Основний рахунок':'Main account', 'Ощадний рахунок':'Savings account', 'Рахунок для витрат':'Spending account'};
+const accName = k => S.lang === 'en' ? (ACC_EN[k] || k) : k;
+
+const I = {
+  uk: {
+    docTitle:'Надходження', back:'← Уся справа', priv:'🕵️ Приватність', caseNo:'Справа про гроші, що прийшли',
+    title:'Звідки приходять гроші і скільки лишається', stamp:'Прибуток',
+    lead:'Що надійшло на рахунки, скільки з цього відкладено і скільки грошей лишається наприкінці кожного місяця.',
+    fIn:'Надійшло', fInSub:(a,b)=>`${a} — ${b}, без місяців без виписки`, fSaved:'Відкладено', fSavedSub:'із цих надходжень',
+    fRate:'Середня частка', fRateSub:'скільки з кожного долара лишається', fBal:'На рахунках', fBalSub:d=>`станом на ${d}`,
+    hIn:'Що надійшло', hintIn:'Помісячно за джерелами. Наведіть на стовпчик, щоб побачити суми.',
+    hSave:'Скільки відкладено', hintSave:'Відкладено = на скільки зросли залишки на рахунках + що пішло в інвестиції. Відсоток — від надходжень того ж місяця.',
+    hInv:'Скільки йде в інвестиції', hintInv:'Перекази в інвестиції — з ощадного рахунку і напряму з основного. Наведіть на стовпчик, щоб побачити суми.',
+    inv:{'Non-registered':'Брокерський рахунок', RRSP:'Пенсійні накопичення', TFSA:'Інвестиції', FHSA:'Накопичення на житло', direct:'Напряму з основного рахунку', unknown:'На ощадний рахунок, куди далі — невідомо'},
+    invSum:(sum, avg, n, a, b) => `${a} — ${b} в інвестиції пішло <b>${sum}</b>, у середньому <b>${avg}</b> на місяць.`,
+    invUnknown:(sum, ms) => ` Ще <b>${sum}</b> переведено на ощадний рахунок (${ms}), але без його виписки не видно, чи це інвестиції, чи гроші просто лежать.`,
+    invNote:'немає виписки ощадного рахунку — невідомо, чи це інвестиції',
+    hBal:'Залишок на кінець місяця', hintBal:'Сума на всіх рахунках в останній день місяця (без інвестицій).',
+    hLog:'Журнал надходжень', hintLog:'Кожна операція з виписок.', hHow:'Як це рахується', hintHow:'І де даних поки бракує.',
+    asTable:'Показати таблицею', more:'Показати ще', month:'Місяць', total:'Разом', income:'Надійшло', saved:'Відкладено',
+    noMain:'немає виписки основного рахунку', approx:'≈ за переказами на ощадний рахунок', stale:d=>`немає виписки — залишок станом на ${d}`,
+    asof:d=>`станом на ${d}`, of:(a,b)=>`${a} з ${b}`, avg:p=>`у середньому — ${p}`,
+    chIncome:'Надходження', chSaving:'Перекази на ощадний', chAll:'Усе',
+    toSav:'на ощадний рахунок', fromSav:'з ощадного назад на основний', ownIn:'з інших своїх рахунків', invest:'в інвестиції', savIn:'прийшло на ощадний з основного',
+    hidden:'сума прихована', gen:g=>`Зібрано ${g} · python3 build_site.py`,
+    src:{'Зарплата':'Зарплата','Страхові виплати':'Страхові виплати','Перекази від людей':'Перекази від людей','Відсотки й кешбек':'Відсотки й кешбек','Інше':'Інше'},
+    notes:[
+      ['Що вважається надходженням','Зарплата, страхові виплати, перекази від людей, відсотки й кешбек. Компенсації витрат від роботодавця сюди не входять — вони вже зменшують витрати на головній сторінці.'],
+      ['Чому не просто «переказала на ощадний»','З ощадного рахунку теж оплачуються кредитки й перекази, тож переказ туди — ще не заощадження. Тому рахуємо, на скільки виросли залишки на всіх рахунках, плюс гроші, що пішли в інвестиції.'],
+      ['Перекази з інших своїх рахунків','Гроші, що прийшли з інших своїх рахунків, — не дохід, тож їх віднято з відкладеного.'],
+    ],
+    gaps:'Де бракує даних',
+  },
+  en: {
+    docTitle:'Income', back:'← Whole case', priv:'🕵️ Privacy', caseNo:'The case of the money that came in',
+    title:'Where the money comes from and how much stays', stamp:'Income',
+    lead:'What came into the accounts, how much of it was set aside, and how much is left at the end of each month.',
+    fIn:'Came in', fInSub:(a,b)=>`${a} — ${b}, months with statements`, fSaved:'Set aside', fSavedSub:'out of that income',
+    fRate:'Average rate', fRateSub:'kept from every dollar', fBal:'In the accounts', fBalSub:d=>`as of ${d}`,
+    hIn:'What came in', hintIn:'Monthly, by source. Hover a column to see the amounts.',
+    hSave:'How much was set aside', hintSave:'Set aside = growth of the account balances + what went into investments. The rate is out of that month’s income.',
+    hInv:'How much goes into investments', hintInv:'Transfers into investments — from the savings account and straight from the main one. Hover a column to see the amounts.',
+    inv:{'Non-registered':'Brokerage account', RRSP:'Retirement savings', TFSA:'Investments', FHSA:'Home savings', direct:'Straight from the main account', unknown:'To savings, destination unknown'},
+    invSum:(sum, avg, n, a, b) => `${a} — ${b}: <b>${sum}</b> went into investments, <b>${avg}</b> a month on average.`,
+    invUnknown:(sum, ms) => ` Another <b>${sum}</b> was moved to savings (${ms}), but without that account\u2019s statement it\u2019s unclear whether it was invested or just parked.`,
+    invNote:'no savings statement — unclear whether this was invested',
+    hBal:'Balance at month end', hintBal:'All accounts on the last day of the month (investments not included).',
+    hLog:'Income log', hintLog:'Every transaction from the statements.', hHow:'How it’s counted', hintHow:'And where data is still missing.',
+    asTable:'Show as a table', more:'Show more', month:'Month', total:'Total', income:'Came in', saved:'Set aside',
+    noMain:'no main account statement', approx:'≈ from transfers to savings', stale:d=>`no statement — balance as of ${d}`,
+    asof:d=>`as of ${d}`, of:(a,b)=>`${a} of ${b}`, avg:p=>`on average — ${p}`,
+    chIncome:'Income', chSaving:'Transfers to savings', chAll:'All',
+    toSav:'to savings', fromSav:'from savings back to main', ownIn:'from your other accounts', invest:'into investments', savIn:'arrived in savings from main',
+    hidden:'amount hidden', gen:g=>`Built ${g} · python3 build_site.py`,
+    src:{'Зарплата':'Salary','Страхові виплати':'Insurance payouts','Перекази від людей':'Transfers from people','Відсотки й кешбек':'Interest & cash back','Інше':'Other'},
+    notes:[
+      ['What counts as income','Salary, insurance payouts, transfers from people, interest and cash back. Employer expense reimbursements are left out — they already reduce spending on the main page.'],
+      ['Why not just “moved to savings”','Cards and transfers are paid from the savings account too, so moving money there isn’t saving yet. Instead we count how much all balances grew, plus money that went into investments.'],
+      ['Transfers from your other accounts','Money that arrives from your other accounts isn’t income, so it’s subtracted from what was set aside.'],
+    ],
+    gaps:'Where data is missing',
+  }
+};
+const t = k => I[S.lang][k];
+const MON = {uk:['січень','лютий','березень','квітень','травень','червень','липень','серпень','вересень','жовтень','листопад','грудень'],
+             en:['January','February','March','April','May','June','July','August','September','October','November','December']};
+const MON_S = {uk:['січ','лют','бер','кві','тра','чер','лип','сер','вер','жов','лис','гру'], en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']};
+const mName = ym => { const m = MON[S.lang][+ym.slice(5) - 1]; return m[0].toUpperCase() + m.slice(1); };
+const mShort = ym => MON_S[S.lang][+ym.slice(5) - 1];
+const dShort = d => `${+d.slice(8)} ${MON_S[S.lang][+d.slice(5,7) - 1]}`;
+const srcName = s => t('src')[s] || s;
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nf = () => new Intl.NumberFormat(S.lang === 'en' ? 'en-CA' : 'uk-UA', {minimumFractionDigits:2, maximumFractionDigits:2});
+const nf0 = () => new Intl.NumberFormat(S.lang === 'en' ? 'en-CA' : 'uk-UA', {maximumFractionDigits:0});
+const redact = () => `<span class="tw" role="img" aria-label="${t('hidden')}">$XXX.XX</span>`;
+const money = n => S.priv ? redact() : (n < 0 ? '−' : '') + '$' + nf().format(Math.abs(n));
+const money0 = n => S.priv ? redact() : (n < 0 ? '−' : '') + '$' + nf0().format(Math.abs(Math.round(n)));
+const pct = x => (x < 0 ? '−' : '') + Math.round(Math.abs(x) * 100) + '%';
+const sum = o => Object.values(o).reduce((a, b) => a + b, 0);
+
+const M = D.months;
+const mainOk = m => m.full[D.main];                              // є повна виписка основного рахунку — надходження повні
+const incomeOf = m => sum(m.income);
+const balOf = m => D.accounts.reduce((a, k) => a + (m.balance[k] ? m.balance[k].v : 0), 0);
+
+/* ---------- обкладинка ---------- */
+function renderFacts() {
+  const ok = M.filter(mainOk);
+  const inc = ok.reduce((a, m) => a + incomeOf(m), 0);
+  const withSave = ok.filter(m => m.saved != null);
+  const saved = withSave.reduce((a, m) => a + m.saved, 0);
+  const incS = withSave.reduce((a, m) => a + incomeOf(m), 0);
+  const fresh = m => D.accounts.every(k => m.balance[k] && (m.balance[k].exact || m.balance[k].asof >= m.m + '-28'));
+  const last = [...M].reverse().find(fresh);         // останній місяць, де відомі всі залишки
+  const asof = last ? D.accounts.map(k => last.balance[k].asof).sort()[0] : null;
+  $('#facts').innerHTML = [
+    [t('fIn'), money0(inc), t('fInSub')(mShort(ok[0].m), mShort(ok.at(-1).m))],
+    [t('fSaved'), money0(saved), t('fSavedSub')],
+    [t('fRate'), incS ? pct(saved / incS) : '—', t('fRateSub')],
+    [t('fBal'), last ? money0(balOf(last)) : '—', last ? t('fBalSub')(dShort(asof)) : ''],
+  ].map(([k, v, s]) => `<div><dt>${k}</dt><dd>${v}<small>${s}</small></dd></div>`).join('');
+}
+
+/* ---------- стовпчики з накопиченням ---------- */
+const tip = $('#tip');
+function showTip(html, el, box) {
+  tip.innerHTML = html; tip.classList.add('on');
+  const r = el.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight;
+  let x = r.left + r.width / 2 - w / 2 + scrollX, y = r.top + scrollY - h - 10;
+  x = Math.max(scrollX + 8, Math.min(x, scrollX + document.documentElement.clientWidth - w - 8));
+  if (y < scrollY + 8) y = r.bottom + scrollY + 10;
+  tip.style.left = x + 'px'; tip.style.top = y + 'px';
+}
+const hideTip = () => tip.classList.remove('on');
+
+function niceMax(v) { const p = Math.pow(10, Math.floor(Math.log10(v))); return [1, 2, 2.5, 5, 10].map(k => k * p).find(k => k >= v); }
+
+/* rows: [{key, label, segs:[{k, v, color, hatch}], total, note}] */
+function stacked(el, rows, tipFor) {
+  const W = Math.max(320, el.clientWidth), H = W < 520 ? 240 : 300;
+  const padL = S.priv ? 8 : 52, padR = 8, padT = 22, padB = 28;
+  const max = niceMax(Math.max(...rows.map(r => r.total), 1));
+  const iw = W - padL - padR, ih = H - padT - padB, step = iw / rows.length;
+  const bw = Math.min(64, step * 0.62), y = v => padT + ih - v / max * ih;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-hidden="true"><defs>
+    <pattern id="hatch-${el.id}" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="rgba(36,28,18,.04)"/><line x1="0" y1="0" x2="0" y2="6" stroke="rgba(36,28,18,.35)" stroke-width="2"/></pattern></defs>`;
+  const lead = max / Math.pow(10, Math.floor(Math.log10(max))), n = lead === 2 ? 4 : 5;   // круглі поділки
+  for (let i = 0; i <= n; i++) {
+    const v = max / n * i, yy = y(v);
+    s += `<line class="${i ? 'gridline' : 'zero'}" x1="${padL}" x2="${W - padR}" y1="${yy}" y2="${yy}"/>`;
+    if (!S.priv) s += `<text x="${padL - 8}" y="${yy + 4}" text-anchor="end">${v >= 1000 ? (v / 1000).toLocaleString(S.lang === 'en' ? 'en-CA' : 'uk-UA', {maximumFractionDigits:1}) + 'k' : nf0().format(v)}</text>`;
+  }
+  rows.forEach((r, i) => {
+    const cx = padL + step * i + step / 2, x = cx - bw / 2;
+    let acc = 0;
+    s += `<g class="col" data-i="${i}">`;
+    if (r.empty) {
+      s += `<rect x="${x}" y="${padT + ih * .55}" width="${bw}" height="${ih * .45}" rx="4" fill="url(#hatch-${el.id})"/>`;
+    }
+    r.segs.filter(g => g.v > 0).forEach((g, j, arr) => {
+      const y0 = y(acc), y1 = y(acc + g.v); acc += g.v;
+      const h = Math.max(0, y0 - y1 - (j < arr.length - 1 ? 2 : 0));   // 2px проміжок між сегментами
+      const top = j === arr.length - 1;
+      s += top
+        ? `<path d="M${x},${y1 + h} V${y1 + 4} Q${x},${y1} ${x + 4},${y1} H${x + bw - 4} Q${x + bw},${y1} ${x + bw},${y1 + 4} V${y1 + h} Z" fill="${g.hatch ? `url(#hatch-${el.id})` : g.color}"/>`
+        : `<rect x="${x}" y="${y1 + 2}" width="${bw}" height="${h}" fill="${g.hatch ? `url(#hatch-${el.id})` : g.color}"/>`;
+      if (g.hatch) s += `<rect x="${x + .75}" y="${y1 + .75}" width="${bw - 1.5}" height="${Math.max(0, h - 1.5)}" fill="none" stroke="${g.color}" stroke-width="1.5" rx="3"/>`;
+    });
+    if (!S.priv && r.total > 0 && !r.empty) s += `<text class="total" x="${cx}" y="${y(r.total) - 7}" text-anchor="middle">${r.total >= 1000 ? nf0().format(Math.round(r.total / 100) / 10) + 'k' : '$' + nf0().format(r.total)}</text>`;
+    s += `<text x="${cx}" y="${H - 8}" text-anchor="middle">${esc(r.label)}</text>`;
+    s += `<rect class="hit" x="${padL + step * i}" y="${padT}" width="${step}" height="${ih + padB}" tabindex="0"/></g>`;
+  });
+  el.innerHTML = s + '</svg>';
+  el.querySelectorAll('.col').forEach(g => {
+    const i = +g.dataset.i, hit = g.querySelector('.hit');
+    const on = () => { el.querySelectorAll('.col').forEach(c => c.classList.toggle('dim', c !== g)); showTip(tipFor(rows[i]), hit); };
+    const off = () => { el.querySelectorAll('.col').forEach(c => c.classList.remove('dim')); hideTip(); };
+    hit.addEventListener('mouseenter', on); hit.addEventListener('focus', on);
+    hit.addEventListener('mouseleave', off); hit.addEventListener('blur', off);
+  });
+}
+
+const legend = (el, items) => { el.innerHTML = items.map(([n, c, h]) => `<li><i class="${h ? 'hatch' : ''}" style="${h ? '' : `background:${c}`}"></i>${esc(n)}</li>`).join(''); };
+const tipRows = (title, segs, total, note) => `<b>${esc(title)}</b>` +
+  segs.map(g => `<div class="r"><span><i style="background:${g.color}"></i>${esc(g.n)}</span><span class="num">${money(g.v)}</span></div>`).join('') +
+  (total != null ? `<div class="r sum"><span>${t('total')}</span><span class="num">${money(total)}</span></div>` : '') +
+  (note ? `<div class="note">${esc(note)}</div>` : '');
+
+function renderIncome() {
+  const used = SOURCES.filter(s => M.some(m => m.income[s]));
+  legend($('#legIn'), [...used.map(s => [srcName(s), SRC_C[s]]), ...(M.some(m => !mainOk(m)) ? [[t('noMain'), '', true]] : [])]);
+  const rows = M.map(m => ({
+    label: mShort(m.m), m, empty: !mainOk(m), total: incomeOf(m),
+    segs: used.map(s => ({k: s, n: srcName(s), v: m.income[s] || 0, color: SRC_C[s]})),
+  }));
+  stacked($('#chartIn'), rows, r => tipRows(mName(r.m.m) + ' ' + r.m.m.slice(0, 4), r.segs.filter(g => g.v), r.total, r.empty ? t('noMain') : ''));
+  $('#tblIn').innerHTML = `<table><thead><tr><th>${t('month')}</th>${used.map(s => `<th>${esc(srcName(s))}</th>`).join('')}<th>${t('total')}</th></tr></thead><tbody>` +
+    M.map(m => `<tr><td>${mName(m.m)}${mainOk(m) ? '' : ` <span class="muted">(${t('noMain')})</span>`}</td>${used.map(s => `<td class="${m.income[s] ? '' : 'na'}">${m.income[s] ? money(m.income[s]) : '—'}</td>`).join('')}<td>${money(incomeOf(m))}</td></tr>`).join('') +
+    `</tbody></table>`;
+}
+
+function renderInvest() {
+  const used = INV.filter(k => M.some(m => m.invest[k]));
+  const name = k => t('inv')[k] || k;
+  legend($('#legInv'), used.map(k => [name(k), INV_C[k], k === 'unknown']));
+  // Місяць без виписки ощадного рахунку — заштрихована заглушка: її висота нічого не означає, суму видно в підказці
+  const rows = M.map(m => {
+    const segs = used.filter(k => k !== 'unknown').map(k => ({k, n: name(k), v: m.invest[k] || 0, color: INV_C[k]}));
+    return {label: mShort(m.m), m, empty: !!m.invest.unknown, total: segs.reduce((a, g) => a + Math.max(0, g.v), 0), segs};
+  });
+  stacked($('#chartInv'), rows, r => {
+    const segs = r.segs.filter(g => g.v);
+    if (r.m.invest.unknown) segs.push({n: name('unknown'), v: r.m.invest.unknown, color: INV_C.unknown});
+    return tipRows(mName(r.m.m) + ' ' + r.m.m.slice(0, 4), segs, segs.length > 1 ? sum(r.m.invest) : null, r.m.invest.unknown ? t('invNote') : '');
+  });
+  const known = M.filter(m => !m.invest.unknown && m.full[D.savings]);
+  const ksum = known.reduce((a, m) => a + sum(m.invest), 0);
+  const unk = M.filter(m => m.invest.unknown);
+  $('#invSum').innerHTML = (known.length ? t('invSum')(money0(ksum), money0(ksum / known.length), known.length, mName(known[0].m), mName(known.at(-1).m).toLowerCase()) : '') +
+    (unk.length ? t('invUnknown')(money0(unk.reduce((a, m) => a + m.invest.unknown, 0)), unk.map(m => mName(m.m).toLowerCase()).join(', ')) : '');
+  $('#tblInv').innerHTML = `<table><thead><tr><th>${t('month')}</th>${used.map(k => `<th>${esc(name(k))}</th>`).join('')}<th>${t('total')}</th></tr></thead><tbody>` +
+    M.map(m => `<tr><td>${mName(m.m)}</td>${used.map(k => `<td class="${m.invest[k] && k !== 'unknown' ? '' : 'na'}">${m.invest[k] ? money(m.invest[k]) : '—'}</td>`).join('')}<td>${money(sum(m.invest))}</td></tr>`).join('') +
+    `</tbody></table>`;
+}
+
+function renderBalance() {
+  const stale = M.some(m => D.accounts.some(k => m.balance[k] && !m.balance[k].exact && (m.balance[k].asof < m.m + '-28')));
+  legend($('#legBal'), [...D.accounts.map(k => [accName(k), accColor(k)]), ...(stale ? [[t('stale')('…').split(' — ')[0], '', true]] : [])]);
+  const rows = M.map(m => {
+    const segs = D.accounts.map(k => {
+      const b = m.balance[k];
+      const old = b && !b.exact && b.asof < m.m + '-28';     // залишок перенесено з попереднього місяця
+      return {k, n: accName(k), v: b ? b.v : 0, color: accColor(k), hatch: old, asof: b && b.asof};
+    });
+    return {label: mShort(m.m), m, total: balOf(m), segs};
+  });
+  stacked($('#chartBal'), rows, r => {
+    const notes = r.segs.filter(g => g.hatch).map(g => `${accName(g.k)}: ${t('stale')(dShort(g.asof))}`).join('; ');
+    return tipRows(mName(r.m.m) + ' ' + r.m.m.slice(0, 4), r.segs, r.total, notes);
+  });
+  $('#tblBal').innerHTML = `<table><thead><tr><th>${t('month')}</th>${D.accounts.map(k => `<th>${esc(accName(k))}</th>`).join('')}<th>${t('total')}</th></tr></thead><tbody>` +
+    M.map(m => `<tr><td>${mName(m.m)}</td>${D.accounts.map(k => { const b = m.balance[k]; if (!b) return '<td class="na">—</td>';
+      const old = !b.exact && b.asof < m.m + '-28'; return `<td${old ? ' class="na"' : ''}>${money(b.v)}${old ? `<br><small>${t('asof')(dShort(b.asof))}</small>` : ''}</td>`; }).join('')}<td>${money(balOf(m))}</td></tr>`).join('') +
+    `</tbody></table>`;
+}
+
+function renderSaving() {
+  const exact = M.filter(m => m.saved != null && mainOk(m));
+  const inc = exact.reduce((a, m) => a + incomeOf(m), 0), sv = exact.reduce((a, m) => a + m.saved, 0);
+  const avg = inc ? sv / inc : null;
+  $('#avgKey').innerHTML = avg != null ? `<i></i>${t('avg')(pct(avg))}` : '';
+  $('#saveRows').innerHTML = M.map(m => {
+    const inc = incomeOf(m), has = m.saved != null && mainOk(m) && inc > 0;
+    const rate = has ? m.saved / inc : null;
+    const w = rate == null ? 0 : Math.min(100, Math.abs(rate) * 100);
+    let sub = '';
+    if (!mainOk(m)) sub = t('noMain');
+    else if (m.method === 'approx') sub = `${t('of')(money(m.saved), money(inc))} · ${t('approx')}`;
+    else if (has) {
+      const parts = [t('of')(money(m.saved), money(inc))];
+      if (m.invested) parts.push(`${money(m.invested)} ${t('invest')}`);
+      if (m.ownIn) parts.push(`−${money(m.ownIn)} ${t('ownIn')}`);
+      sub = parts.join(' · ');
+    }
+    return `<li class="saverow">
+      <div class="mo">${mName(m.m)}<small>${t('income')}: ${mainOk(m) ? money(inc) : '—'}</small></div>
+      <div class="bar"><div class="meter">${rate != null ? `<div class="fill ${rate < 0 ? 'neg' : m.method === 'approx' ? 'approx' : ''}" style="width:${w}%"></div>` : ''}${avg != null ? `<div class="avg" style="left:${Math.min(100, avg * 100)}%"></div>` : ''}</div></div>
+      <div class="pct ${rate == null ? 'na' : rate < 0 ? 'neg' : ''}">${rate == null ? '—' : (m.method === 'approx' ? '≈' : '') + pct(rate)}</div>
+      <div class="sub">${sub}</div></li>`;
+  }).join('');
+}
+
+/* ---------- журнал ---------- */
+const LOG_KINDS = {income: ['income'], saving: ['saving'], all: ['income', 'saving', 'own_transfer']};
+function renderLog() {
+  $('#logChips').innerHTML = [['income', t('chIncome')], ['saving', t('chSaving')], ['all', t('chAll')]]
+    .map(([k, n]) => `<button class="chip" data-log="${k}" aria-pressed="${S.log === k}">${n}</button>`).join('');
+  const rows = D.flows.filter(f => LOG_KINDS[S.log].includes(f.k));
+  $('#log').innerHTML = rows.slice(0, S.shown).map(f => {
+    const color = f.k === 'income' ? SRC_C[f.src] || 'var(--s5)' : f.k === 'saving' ? 'var(--brass-dk)' : 'var(--muted)';
+    const what = f.k === 'income' ? srcName(f.src) : f.k === 'saving' ? (f.a > 0 ? t('toSav') : t('fromSav')) : t('ownIn');
+    const shown = f.k === 'saving' ? -f.a : f.a;      // переказ на ощадний — гроші пішли з основного
+    return `<li><span class="d">${f.d}</span><div class="w"><b><i style="background:${color}"></i>${esc(what)}</b><span>${esc(f.desc)} · ${esc(accName(f.acc))}</span></div>
+      <span class="a num ${shown < 0 ? 'out' : ''}">${shown > 0 ? '+' : ''}${money(shown)}</span></li>`;
+  }).join('');
+  $('#more').hidden = rows.length <= S.shown;
+}
+
+function renderNotes() {
+  const gaps = [];
+  M.forEach(m => {
+    if (!mainOk(m)) gaps.push(`${mName(m.m)}: ${accName(D.main)}`);
+    D.accounts.slice(1).forEach(k => { const b = m.balance[k]; if (b && !b.exact && b.asof < m.m + '-28') gaps.push(`${mName(m.m)}: ${accName(k)}`); });
+  });
+  const tilts = ['-1.2deg', '.8deg', '-.5deg', '1.1deg'];
+  $('#notes').innerHTML = [...t('notes'), ...(gaps.length ? [[t('gaps'), gaps.join(' · ')]] : [])]
+    .map(([h, p], i) => `<figure class="note${i === t('notes').length ? ' warn' : ''}" style="--tilt:${tilts[i % 4]}"><h3>${esc(h)}</h3><p>${esc(p)}</p></figure>`).join('');
+}
+
+function render() {
+  document.documentElement.lang = S.lang;
+  document.title = t('docTitle');
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === S.lang));
+  $('#priv').setAttribute('aria-pressed', S.priv);
+  renderFacts(); renderIncome(); renderSaving(); renderInvest(); renderBalance(); renderLog(); renderNotes();
+  $('#footer').textContent = t('gen')(D.generated);
+}
+
+document.addEventListener('click', e => {
+  const l = e.target.closest('[data-lang]');
+  if (l && l.dataset.lang !== S.lang) { S.lang = l.dataset.lang; try { localStorage.setItem('lang', S.lang); } catch {} render(); }
+  if (e.target.closest('#priv')) { S.priv = !S.priv; try { localStorage.setItem('privacy', S.priv ? '1' : '0'); } catch {} render(); }
+  const c = e.target.closest('[data-log]');
+  if (c) { S.log = c.dataset.log; S.shown = 25; renderLog(); }
+  if (e.target.closest('#more')) { S.shown += 25; renderLog(); }
+});
+let rz; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { renderIncome(); renderInvest(); renderBalance(); }, 120); });
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+# Особисті дані — ніколи не комітимо
+*.db
+*.pdf
+*.png
+*.jpg
+*.csv
+!demo/*.csv
+report_*.csv
+
+# Службове
+.DS_Store
+__pycache__/
+*.pyc

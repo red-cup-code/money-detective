@@ -1,0 +1,1078 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Справа про зниклі гроші · досьє</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<script>document.documentElement.dataset.bg='aged';document.documentElement.dataset.board='scraps';</script>
+<style>
+:root{
+  /* Чернетка у стилі «нуарного досьє»: темний стіл, манільський папір, чорнило, латунь, сургуч */
+  --desk:#14120e; --desk-warm:#1c160d; --brass:#c9a15a; --brass-dk:#7a5c26; --gold-lt:#e2c181; --cream:#efe7d6; --wax:#c8372d;
+  --cork:var(--desk); --cork-a:rgba(201,161,90,.05); --cork-b:rgba(0,0,0,.25);
+  --paper:#f4ecdd; --paper-line:rgba(36,28,18,.09); --manila:#f4ecdd; --manila-edge:#d9c088;
+  --tape:#e8d4a0;
+  --ink:#241c12; --ink-soft:#5e4e36; --red:#b02e25; --string:#c8372d;
+  --note-y:#e8d4a0; --note-p:#f3d2c6; --note-m:#dfe0c4; --note-b:#e4dccb; --note-l:#eadcb9;
+  --hl:rgba(201,161,90,.42);
+  --shadow:0 1px 0 rgba(0,0,0,.35), 0 16px 34px rgba(0,0,0,.55);
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --hand:"Playfair Display", Georgia, serif;
+  --hand-s:19px; --hand-m:22px; --hand-l:32px;
+  --card:#fbf6ea; --ok:#3f5f2a; --pen:#7a5c26;
+  --on-cork:var(--cream);
+  --head:"Playfair Display", Georgia, serif;
+  color-scheme:light;
+  --rule:rgba(201,161,90,.45); --kicker:var(--brass); --hint:var(--gold-lt); --grain:rgba(255,255,255,.025);
+}
+/* Фон — «старий папір» */
+:root[data-bg="aged"]{
+  --on-cork:var(--ink); --rule:rgba(36,28,18,.28); --kicker:var(--brass-dk); --hint:#5e4e36; --grain:rgba(36,28,18,.05);
+  --shadow:0 1px 0 rgba(36,28,18,.12), 0 12px 26px rgba(70,45,15,.28);
+}
+:root[data-bg="aged"]{--desk:#e6d6b0; --desk-warm:#efe3c6}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; color:var(--ink); font:16px/1.45 "IBM Plex Sans", system-ui, sans-serif;
+  background:
+    radial-gradient(var(--cork-a) 1px, transparent 1.7px) 0 0/9px 9px,
+    radial-gradient(var(--cork-b) 1.3px, transparent 2.2px) 4px 6px/14px 14px,
+    radial-gradient(var(--cork-a) .8px, transparent 1.4px) 2px 3px/23px 17px,
+    var(--cork);
+  overflow-x:hidden;
+}
+.wrap{max-width:1100px; margin:0 auto; padding:36px 16px 72px}
+button{font:inherit; color:inherit}
+.paper{background:var(--paper); box-shadow:var(--shadow); border-radius:3px}
+.muted{color:var(--ink-soft)}
+.hl{background:linear-gradient(transparent 55%, var(--hl) 55%, var(--hl) 92%, transparent 92%); padding:0 .1em}
+
+/* ---- стікер-мітки розділів ---- */
+.section{margin-top:64px}
+.tape{
+  display:inline-block; position:relative; margin:0 0 22px; padding:6px 22px 4px;
+  font:700 clamp(22px,4vw,30px)/1.1 var(--head); letter-spacing:.04em; text-transform:uppercase;
+  background:var(--tape); transform:rotate(-1.4deg); box-shadow:0 3px 8px rgba(0,0,0,.18);
+  clip-path:polygon(2% 0,98% 4%,100% 50%,97% 100%,1% 95%,0 45%);
+}
+.tape + .hint{display:block; margin:-14px 0 20px 6px; font:600 var(--hand-s)/1.1 var(--hand); color:var(--on-cork)}
+
+/* ---- обкладинка справи ---- */
+.folder{position:relative; background:var(--manila); border-radius:4px 14px 8px 8px; padding:34px clamp(18px,4vw,40px) 72px;
+  box-shadow:var(--shadow); border-bottom:6px solid var(--manila-edge)}
+.folder::before{content:""; position:absolute; top:-24px; left:26px; width:190px; height:26px; background:var(--manila); border-radius:12px 12px 0 0}
+.case-no{font:15px var(--mono); letter-spacing:.12em; color:var(--ink-soft)}
+.folder h1{margin:6px 0 4px; font:700 clamp(38px,8vw,76px)/1 var(--head); text-transform:uppercase; letter-spacing:.01em}
+.folder .lead{margin:0 0 22px; font-size:clamp(16px,2.4vw,19px); max-width:36em}
+.facts{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px 18px; margin:0; font-family:var(--mono)}
+.facts dt{font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft)}
+.facts dd{margin:2px 0 0; font-size:16px; border-bottom:1px dashed rgba(43,40,51,.35); padding-bottom:4px}
+.stamp{position:absolute; font:700 20px/1 var(--head); letter-spacing:.12em; text-transform:uppercase; color:var(--red);
+  border:3px double var(--red); padding:8px 12px 6px; border-radius:6px; opacity:.82; mix-blend-mode:multiply; pointer-events:none}
+.folder .stamp{top:26px; right:22px; transform:rotate(9deg)}
+.sticky{position:absolute; right:clamp(10px,4vw,46px); bottom:-34px; width:190px; padding:16px 14px 14px; background:var(--note-y);
+  font:700 var(--hand-m)/1 var(--hand); transform:rotate(4deg); box-shadow:var(--shadow)}
+.sticky::before{content:""; position:absolute; top:-10px; left:50%; width:70px; height:20px; margin-left:-35px; background:var(--tape); transform:rotate(-3deg)}
+
+/* ---- фільтри ---- */
+.filters{margin-top:64px; padding:14px 16px; display:flex; flex-direction:column; gap:10px; transform:rotate(-.4deg)}
+.chips{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+.chips:empty{display:none}
+.dates{gap:8px}
+.dates[hidden]{display:none}
+.dates label{display:inline-flex; align-items:center; gap:6px; font:12px var(--mono); letter-spacing:.06em; color:var(--ink-soft)}
+.date-in{border:2px solid var(--ink); border-radius:999px; padding:3px 10px; background:transparent; color:var(--ink); font:700 14px var(--mono)}
+.date-in:focus-visible{outline:3px solid var(--red); outline-offset:2px}
+.chips-label{font:12px var(--mono); letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-right:4px; min-width:58px}
+.chip{border:2px solid var(--ink); background:transparent; border-radius:999px; padding:4px 13px; cursor:pointer; font-weight:700; font-size:14px;
+  transition:transform .15s, background .15s}
+.chip:hover{transform:translateY(-1px) rotate(-1deg)}
+.chip[aria-pressed="true"]{background:var(--ink); color:var(--paper)}
+.chip:focus-visible,.t-row:focus-visible,.btn:focus-visible,.more:focus-visible{outline:3px solid var(--red); outline-offset:2px}
+
+/* ---- дошка доказів ---- */
+.board{position:relative; padding-top:10px}
+.strings{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1; overflow:visible}
+.strings path{fill:none; stroke:var(--string); stroke-width:2.2; stroke-linecap:round; filter:drop-shadow(0 2px 1px rgba(0,0,0,.25))}
+.pin{position:absolute; width:18px; height:18px; border-radius:50%; left:50%; margin-left:-9px; z-index:3;
+  background:radial-gradient(circle at 35% 32%, #ff9aa8, var(--red) 55%, #7e0b1b); box-shadow:0 3px 4px rgba(0,0,0,.35)}
+.victim{position:relative; z-index:2; width:min(330px,100%); margin:0 auto 76px; padding:22px 18px 20px; text-align:center; transform:rotate(-1.2deg)}
+.victim .pin.top{top:-8px} .victim .pin.bottom{bottom:-8px}
+.v-emoji{font-size:58px; line-height:1}
+.v-label{font:12px var(--mono); letter-spacing:.2em; color:var(--red); margin-top:6px}
+.v-name{font:700 34px/1.1 var(--head); text-transform:uppercase}
+.v-loss{font-size:17px; margin-top:4px}
+.suspects{position:relative; z-index:2; display:grid; grid-template-columns:repeat(auto-fill,minmax(205px,1fr)); gap:40px 26px}
+.suspect{position:relative; background:var(--card); padding:12px 12px 14px; box-shadow:var(--shadow); transform:rotate(var(--tilt));
+  transition:transform .25s cubic-bezier(.3,1.6,.5,1); cursor:zoom-in}
+.suspect:hover{transform:rotate(0) translateY(-6px) scale(1.04); z-index:4}
+.suspect .pin{top:-9px}
+.mug{position:relative; height:128px; display:grid; place-items:center; overflow:hidden;
+  background:repeating-linear-gradient(to bottom, transparent 0 21px, rgba(43,40,51,.22) 21px 22px), var(--mug)}
+.mug-emoji{font-size:66px; line-height:1; filter:drop-shadow(0 4px 2px rgba(0,0,0,.15)); transition:transform .3s}
+.suspect:hover .mug-emoji{transform:rotate(-8deg) scale(1.08)}
+.plate{position:absolute; bottom:7px; left:50%; transform:translateX(-50%); background:var(--ink); color:var(--card); font:12px var(--mono); padding:2px 9px; letter-spacing:.08em}
+.suspect h3{margin:10px 0 0; font:700 var(--hand-m)/1 var(--hand); color:var(--ink)}
+.alias{margin:2px 0 8px; font-size:14px; font-style:italic; color:var(--ink-soft)}
+.suspect dl{display:flex; gap:14px; margin:0; font-family:var(--mono); color:var(--ink)}
+.suspect dt{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft)}
+.suspect dd{margin:0; font-size:15px; font-weight:700}
+.suspect .stamp{top:16px; right:-14px; font-size:12px; padding:5px 7px 3px; transform:rotate(14deg); background:rgba(255,255,255,.75); mix-blend-mode:normal; opacity:.95}
+.empty{font:700 var(--hand-m) var(--hand); color:var(--on-cork); text-align:center}
+
+/* ---- експертиза ---- */
+.sheet{padding:26px clamp(16px,3vw,32px) 22px; position:relative;
+  background:repeating-linear-gradient(to bottom, transparent 0 33px, var(--paper-line) 33px 34px), var(--paper);
+  background-position:0 18px}
+.sheet::before{content:""; position:absolute; top:0; bottom:0; left:clamp(8px,2vw,20px); border-left:2px solid rgba(211,38,60,.28)}
+.forensics{list-style:none; margin:0; padding:0 0 0 12px; display:grid; gap:14px}
+.forensics li{display:grid; grid-template-columns:44px minmax(0,1.3fr) minmax(0,2fr) auto; gap:12px; align-items:center}
+.f-emoji{font-size:30px; text-align:center}
+.f-name b{display:block; font-size:17px}
+.f-name small{font-size:14px; font-style:italic; color:var(--ink-soft)}
+.f-bar{height:22px; position:relative}
+.f-bar span{display:block; height:100%; border-radius:4px 10px 6px 12px / 12px 6px 10px 4px; opacity:.9; transform:skewX(-6deg);
+  transform-origin:left; animation:grow .8s cubic-bezier(.2,.8,.2,1) both}
+.f-amt{font:700 16px var(--mono); text-align:right; white-space:nowrap}
+.f-amt small{display:block; font-weight:400; font-size:12px; color:var(--ink-soft)}
+@keyframes grow{from{transform:skewX(-6deg) scaleX(0)}}
+
+/* ---- хронологія ---- */
+.timeline{list-style:none; margin:0; padding:0 0 0 12px; display:grid; gap:6px; font-family:var(--mono)}
+.t-row{width:100%; display:grid; grid-template-columns:minmax(120px,170px) 1fr auto; grid-template-areas:"m bar s" "m big big"; gap:2px 14px; align-items:center;
+  text-align:left; background:transparent; border:2px dashed transparent; border-radius:8px; padding:8px 10px; cursor:pointer; transition:background .15s}
+.t-row:hover{background:rgba(255,212,0,.16)}
+.t-row[aria-pressed="true"]{border-color:var(--red); background:rgba(211,38,60,.06)}
+.t-m{grid-area:m; font-size:17px; font-weight:700; text-transform:uppercase; letter-spacing:.04em}
+.t-m i{display:block; font-style:normal; font-weight:400; font-size:12px; text-transform:none; color:var(--ink-soft); letter-spacing:0}
+.t-bar{grid-area:bar; height:16px; background:repeating-linear-gradient(90deg, rgba(43,40,51,.12) 0 8px, transparent 8px 12px)}
+.t-bar span{display:block; height:100%; background:var(--ink); animation:grow .8s cubic-bezier(.2,.8,.2,1) both; transform-origin:left}
+.t-s{grid-area:s; font-weight:700; white-space:nowrap}
+.t-big{grid-area:big; font-size:13px; color:var(--ink-soft)}
+
+/* ---- режим приватності ---- */
+.priv-right{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+.priv-row{display:flex; flex-wrap:wrap; gap:10px; justify-content:space-between; align-items:center; border-top:1px dashed rgba(43,40,51,.25); padding-top:10px}
+.schema-link{text-decoration:none; color:var(--ink); display:inline-flex; align-items:center; gap:6px}
+.schema-link[hidden]{display:none}
+.schema-link:focus-visible{outline:3px solid var(--red); outline-offset:2px}
+.priv{display:inline-flex; align-items:center; gap:8px; border:2px solid var(--ink); background:transparent; border-radius:999px; padding:5px 14px 5px 6px; cursor:pointer; font-weight:800; font-size:14px}
+.priv .knob{width:34px; height:20px; border-radius:999px; background:rgba(43,40,51,.2); position:relative; transition:background .2s}
+.priv .knob::after{content:""; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:var(--card); box-shadow:0 1px 2px rgba(0,0,0,.3); transition:transform .2s}
+.priv[aria-pressed="true"] .knob{background:var(--red)}
+.priv[aria-pressed="true"] .knob::after{transform:translateX(14px)}
+.priv:focus-visible{outline:3px solid var(--red); outline-offset:2px}
+.tw{white-space:nowrap; letter-spacing:.06em; font-family:var(--mono); color:var(--ink);
+  text-shadow:.5px 0 0 rgba(43,40,51,.85), -.3px .3px 0 rgba(43,40,51,.3)}
+/* у великих заголовках X-и набрані тим самим шрифтом, що й заголовок */
+h1 .tw, .due .tw, .v-name .tw{font-family:inherit; letter-spacing:.02em; text-shadow:none}
+.due strong .tw{font-size:1em; text-transform:none}
+.is-private .actions{display:none}
+.lang{display:inline-flex; border:2px solid var(--ink); border-radius:999px; overflow:hidden; font:700 12px var(--mono)}
+.lang button{border:0; background:transparent; padding:4px 11px; color:var(--ink); cursor:pointer; letter-spacing:.08em}
+.lang button[aria-pressed="true"]{background:var(--ink); color:var(--paper)}
+.lang button:focus-visible{outline:3px solid var(--red); outline-offset:-3px}
+
+/* ---- постанова ---- */
+.doc{position:relative; max-width:760px; margin:0 auto; padding:clamp(24px,5vw,48px) clamp(18px,5vw,56px) 34px; font-family:var(--mono); font-size:15px; transform:rotate(.4deg)}
+.doc .pin{top:-9px}
+.doc-meta{display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; font-size:13px; color:var(--ink-soft); margin:0}
+.doc h3{text-align:center; margin:22px 0 18px; font:700 34px/1 var(--head); letter-spacing:.14em}
+.doc h3 small{display:block; margin-top:6px; font:14px var(--mono); letter-spacing:.04em; color:var(--ink-soft)}
+.doc p{margin:0 0 12px; text-align:justify; hyphens:auto}
+.due{display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; margin:22px 0; padding:14px 18px; border:2px solid var(--ink); border-radius:6px; background:rgba(255,212,0,.18)}
+.due span{font-size:14px; letter-spacing:.14em; text-transform:uppercase}
+.due strong{font:700 clamp(34px,7vw,48px)/1 var(--head)}
+.pay-table{width:100%; border-collapse:collapse; margin:8px 0 16px; font-size:14px}
+.pay-table th{text-align:left; font-weight:400; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); border-bottom:2px solid var(--ink); padding:4px 6px}
+.pay-table td{padding:7px 6px; border-bottom:1px dashed rgba(43,40,51,.3)}
+.pay-table .num{text-align:right; white-space:nowrap}
+.pay-table .ok{color:var(--ok); font-weight:700}
+.empty-month{text-align:center; font:700 var(--hand-m)/1.15 var(--hand); margin:18px 0}
+.pay-table tfoot td{font-weight:700; border-bottom:0}
+.pending{font-size:13px; color:var(--ink-soft); border-left:3px solid var(--hl); padding-left:10px}
+.sign{display:flex; justify-content:flex-end; align-items:baseline; gap:10px; margin-top:26px}
+.signature{font:700 var(--hand-l)/1 var(--hand); color:var(--pen); transform:rotate(-6deg); display:inline-block}
+.doc .stamp{right:clamp(10px,4vw,40px); top:96px; font-size:24px; transform:rotate(12deg)}
+.actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:24px}
+.btn{border:2px solid var(--ink); background:var(--ink); color:var(--paper); padding:9px 16px; border-radius:8px; cursor:pointer; font:700 15px "IBM Plex Sans", sans-serif;
+  box-shadow:0 4px 0 rgba(0,0,0,.25); transition:transform .1s, box-shadow .1s}
+.btn.ghost{background:transparent; color:var(--ink)}
+.btn:active{transform:translateY(3px); box-shadow:0 1px 0 rgba(0,0,0,.25)}
+
+/* ---- матеріали справи ---- */
+.log-head{display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; margin-bottom:12px; padding-left:12px}
+.log-filters{display:flex; flex-wrap:wrap; gap:10px; flex:1 1 420px}
+.cat-select{flex:0 1 230px; cursor:pointer}
+.forensics li[data-cat]{cursor:pointer; border-radius:8px; transition:background .15s}
+.forensics li[data-cat]:hover{background:rgba(255,212,0,.16)}
+.forensics li[data-cat]:focus-visible{outline:3px solid var(--red); outline-offset:2px}
+.search{flex:1 1 240px; max-width:380px; border:2px solid var(--ink); border-radius:8px; padding:8px 12px; background:var(--card); font:15px var(--mono); color:var(--ink)}
+.log-count{font:13px var(--mono); color:var(--ink-soft)}
+.log{list-style:none; margin:0; padding:0 0 0 12px; font-family:var(--mono)}
+.log li{display:grid; grid-template-columns:62px 34px minmax(0,1fr) auto; gap:10px; align-items:center; padding:7px 0; border-bottom:1px dashed rgba(43,40,51,.25)}
+.l-date{font-size:13px; line-height:1.2}
+.l-date small{color:var(--ink-soft)}
+.l-emoji{font-size:22px; text-align:center}
+.l-main{min-width:0}
+.l-main b{display:block; font-family:"IBM Plex Sans", sans-serif; font-size:15px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.l-main small{display:block; font-size:12px; color:var(--ink-soft); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.l-amt{font-weight:700; white-space:nowrap}
+.l-amt.neg{color:var(--ok)}
+.l-amt{text-align:right}
+.l-orig{display:block; font-weight:400; font-size:12px; color:var(--ink-soft)}
+.more{display:block; margin:16px auto 0; background:transparent; border:2px dashed var(--ink); border-radius:8px; padding:8px 18px; cursor:pointer; font:700 14px var(--mono)}
+
+footer{margin-top:60px; text-align:center}
+footer .paper{display:inline-block; padding:12px 18px; font:13px var(--mono); transform:rotate(-1deg); max-width:100%}
+footer code{background:rgba(43,40,51,.08); padding:1px 5px; border-radius:4px}
+
+.toast{position:fixed; left:50%; bottom:24px; transform:translate(-50%,120px); background:var(--ink); color:var(--card); padding:10px 18px; border-radius:10px;
+  font-weight:700; transition:transform .3s cubic-bezier(.3,1.5,.5,1); z-index:10}
+.toast.show{transform:translate(-50%,0)}
+
+@media (max-width:700px){
+  .folder{padding-bottom:26px}
+  .folder .stamp{position:static; display:inline-block; margin-top:16px; transform:rotate(-4deg)}
+  .sticky{position:absolute; right:12px; bottom:-22px; width:150px; padding:12px 10px 10px; font-size:var(--hand-s)}
+  .victim{margin-bottom:40px}
+  .suspects{grid-template-columns:repeat(2,minmax(0,1fr)); gap:30px 14px}
+  .mug{height:96px} .mug-emoji{font-size:48px}
+  .suspect h3{font-size:var(--hand-s)}
+  .suspect dl{flex-direction:column; gap:2px}
+  .suspect .stamp{display:none}
+  .forensics li{grid-template-columns:34px minmax(0,1fr) auto; grid-template-areas:"e n a" "b b b"}
+  .f-emoji{grid-area:e; font-size:24px} .f-name{grid-area:n} .f-amt{grid-area:a} .f-bar{grid-area:b; height:14px}
+  .t-row{grid-template-columns:1fr auto; grid-template-areas:"m s" "bar bar" "big big"}
+  .doc .stamp{position:static; display:inline-block; margin-top:8px; transform:rotate(-6deg)}
+  .doc p{text-align:left}
+  .pay-table .opt{display:none}
+  .log li{grid-template-columns:52px minmax(0,1fr) auto} .l-emoji{display:none}
+}
+
+/* ================= стиль «нуарне досьє» (чернетка) ================= */
+.ico{display:block; fill:none; stroke:var(--ink); stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; overflow:visible}
+.ico .p{fill:var(--card)} .ico .k{fill:var(--ink)} .ico .w{fill:var(--wax)} .ico .b{fill:var(--brass)}
+.mug-emoji{filter:drop-shadow(0 3px 2px rgba(36,28,18,.25))}
+.mug-emoji .ico{width:72px; height:72px}
+.v-emoji .ico{width:68px; height:68px; margin:0 auto}
+body{background:
+    radial-gradient(ellipse 110% 60% at 50% 0%, rgba(201,161,90,.10), transparent 70%),
+    radial-gradient(var(--grain) 1px, transparent 1.6px) 0 0/7px 7px,
+    linear-gradient(var(--desk-warm), var(--desk) 40%)}
+.paper{border-radius:2px; box-shadow:var(--shadow), inset 0 0 0 1px rgba(36,28,18,.08)}
+.section{counter-increment:exhibit}
+.tape{display:block; background:none; transform:none; clip-path:none; box-shadow:none; padding:0 0 12px; margin:0 0 6px;
+  font:700 clamp(28px,4.6vw,40px)/1.08 var(--head); text-transform:none; letter-spacing:-.01em; color:var(--on-cork);
+  border-bottom:1px solid var(--rule)}
+.tape::before{content:"№ " counter(exhibit, decimal-leading-zero); display:block; margin-bottom:10px;
+  font:500 12px/1 var(--mono); letter-spacing:.24em; color:var(--kicker)}
+.tape + .hint{margin:8px 0 24px; font:italic 500 var(--hand-s)/1.3 var(--hand); color:var(--hint)}
+
+/* обкладинка: заголовок на всю ширину, факти в один ряд, печатка вгорі праворуч, стікер унизу */
+.folder{
+  background:
+    radial-gradient(ellipse at 80% 40%, rgba(255,255,255,.35), transparent 60%),
+    repeating-linear-gradient(0deg, rgba(36,28,18,.018) 0 2px, transparent 2px 4px), var(--manila);
+  border-radius:2px 12px 2px 2px; border-bottom:6px solid var(--manila-edge); padding-bottom:92px}
+.folder::before{background:var(--manila); width:200px}
+.case-no{color:var(--brass-dk); letter-spacing:.2em; text-transform:uppercase; font-size:13px}
+.folder h1{font:700 clamp(40px,7.4vw,78px)/1.02 var(--head); text-transform:none; letter-spacing:-.015em; margin:10px 0 14px}
+.folder .lead{color:var(--ink-soft); max-width:44em}
+.facts dd{border-bottom:1px solid rgba(36,28,18,.22)}
+.stamp{font-family:var(--mono); font-weight:700; letter-spacing:.18em; color:var(--wax); border:3px double var(--wax); border-radius:3px}
+.folder .stamp{top:26px; right:26px; transform:rotate(8deg)}
+.sticky{width:216px; text-wrap:balance; background:var(--tape); font:italic 600 var(--hand-m)/1.15 var(--hand); color:var(--ink); transform:rotate(3deg);
+  border-radius:2px 2px 2px 14px; padding:18px 16px 14px 30px}
+.sticky{white-space:pre-line; font:500 28px/1.15 'Caveat', 'Segoe Script', cursive; letter-spacing:.01em; color:#2a3a6b}
+.sticky::before{top:14px; left:12px; width:10px; height:10px; margin:0; border-radius:50%; background:var(--desk); transform:none; box-shadow:inset 0 0 0 2px var(--brass-dk)}
+
+/* фільтри */
+.filters{transform:none}
+.chip{border-width:1.5px; font-weight:600}
+.chip:hover{transform:translateY(-1px)}
+.priv[aria-pressed="true"] .knob{background:var(--wax)}
+
+/* дошка: шпильки-сургуч, картки підозрюваних на папері */
+.pin{background:radial-gradient(circle at 35% 30%, #e0574b, var(--wax) 55%, #7d1f18); box-shadow:0 3px 5px rgba(0,0,0,.5)}
+.victim .v-label{color:var(--wax); letter-spacing:.24em}
+.v-name{font:700 36px/1.1 var(--head); text-transform:none}
+.mug{background:repeating-linear-gradient(to bottom, transparent 0 21px, rgba(36,28,18,.2) 21px 22px), color-mix(in srgb, var(--mug) 30%, var(--paper))}
+.plate{background:var(--ink); color:var(--cream)}
+.suspect h3{font:italic 600 var(--hand-m)/1.1 var(--hand)}
+.suspect .stamp{background:rgba(251,246,234,.85)}
+.empty{font:italic 600 var(--hand-m) var(--hand)}
+
+/* експертиза, хронологія, постанова */
+.sheet::before{border-left:1px solid rgba(200,55,45,.35)}
+.f-bar span{border-radius:1px; transform:none; opacity:1}
+@keyframes grow{from{transform:scaleX(0)}}
+.t-row:hover,.forensics li[data-cat]:hover{background:rgba(201,161,90,.16)}
+.t-row[aria-pressed="true"]{border-color:var(--wax); background:rgba(200,55,45,.06)}
+.t-bar span{background:var(--brass-dk)}
+.doc{transform:none}
+.doc h3{font:700 36px/1.05 var(--head); letter-spacing:.02em}
+.due{border-width:1px; border-radius:2px; background:rgba(201,161,90,.18)}
+.due strong{font-family:var(--head)}
+.empty-month{font:italic 600 var(--hand-m)/1.2 var(--hand)}
+.signature{font:italic 600 var(--hand-l)/1 var(--hand)}
+.btn{background:var(--wax); border-color:var(--wax); color:#fff6ea; border-radius:2px; box-shadow:0 3px 0 #7d1f18; font-weight:600}
+.btn.ghost{background:transparent; color:var(--ink); border-color:var(--ink); box-shadow:none}
+.search{border-width:1.5px; border-radius:2px}
+.more{border-radius:2px}
+footer .paper{transform:none}
+.toast{background:#1b1813; color:var(--cream); border:1px solid var(--brass); border-radius:2px}
+
+@media (max-width:700px){
+  .folder{padding-bottom:30px}
+  .mug-emoji .ico{width:54px; height:54px}
+  .folder .stamp{position:static; display:inline-block; margin-top:16px; transform:rotate(-4deg)}
+  .sticky{width:200px; font-size:25px; position:relative; right:auto; bottom:auto; margin:18px 0 -6px auto}
+}
+
+/* ================= дошка доказів: клаптики старого паперу ================= */
+:root[data-board]:not([data-board="big"]) .victim{width:min(250px,100%); margin-bottom:56px; padding:14px 14px 14px}
+:root[data-board]:not([data-board="big"]) .v-emoji .ico{width:46px; height:46px}
+:root[data-board]:not([data-board="big"]) .v-name{font-size:26px}
+:root[data-board]:not([data-board="big"]) .v-loss{font-size:15px}
+:root[data-board]:not([data-board="big"]) .suspect h3{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+
+/* E · клаптики старого паперу (рвані краї, плями, лінійка) */
+:root[data-board="scraps"] .victim{background:none; box-shadow:none; filter:drop-shadow(0 6px 8px rgba(70,45,15,.3)); isolation:isolate;
+  width:min(270px,100%); padding:18px 18px 22px; transform:rotate(-1.2deg)}
+:root[data-board="scraps"] .victim::before{content:""; position:absolute; inset:0; z-index:-1; background-color:#f3ead4;
+  background-image:radial-gradient(ellipse 45% 50% at 20% 25%, rgba(160,110,40,.05), transparent 70%),
+    repeating-linear-gradient(to bottom, transparent 0 21px, rgba(70,110,170,.08) 21px 22px);
+  clip-path:polygon(0.0% 1.0%,7.2% 0.4%,15.5% 1.1%,26.5% 1.3%,34.1% 0.6%,41.2% 0.3%,51.3% 0.0%,59.5% 1.0%,69.7% 0.3%,80.3% 1.2%,87.3% 1.2%,98.5% 0.5%,100% 0.8%,99.9% 5.0%,97.7% 15.4%,99.6% 24.0%,99.5% 36.3%,98.8% 49.4%,98.4% 64.2%,99.6% 76.0%,99.7% 88.4%,100.0% 98.2%,97.3% 95.4%,93.8% 94.5%,90.5% 94.6%,87.0% 97.8%,83.3% 96.2%,80.0% 95.6%,74.3% 97.9%,69.6% 95.0%,64.6% 95.0%,60.7% 99.9%,56.0% 97.3%,51.1% 99.1%,45.9% 95.4%,43.3% 95.9%,39.8% 95.3%,34.0% 99.3%,30.4% 97.9%,26.6% 99.5%,22.4% 95.6%,19.1% 97.4%,15.7% 97.5%,10.0% 96.4%,6.8% 100.0%,2.5% 94.5%,0.3% 96.0%,2.0% 82.6%,0.2% 70.7%,2.5% 59.0%,2.4% 46.3%,0.0% 31.3%,1.7% 17.2%,0.7% 4.4%)}
+:root[data-board="scraps"] .victim .pin.top{top:-6px}
+:root[data-board="scraps"] .victim .pin.bottom{bottom:-4px}
+:root[data-board="scraps"] .v-name{font-style:italic}
+
+:root[data-board="scraps"] .suspects{grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:30px 30px; max-width:900px; margin:0 auto}
+:root[data-board="scraps"] .suspect{display:grid; grid-template-columns:40px minmax(0,1fr); gap:12px; align-items:center; padding:20px 20px 18px 18px;
+  background:none; box-shadow:none; transform:rotate(calc(var(--tilt) * .7)); filter:drop-shadow(0 5px 6px rgba(70,45,15,.3)); isolation:isolate}
+:root[data-board="scraps"] .suspect::before{content:""; position:absolute; inset:0; z-index:-1;
+  background-image:
+    radial-gradient(ellipse 38% 46% at 82% 30%, rgba(160,110,40,.06), transparent 70%),
+    radial-gradient(ellipse 30% 40% at 12% 85%, rgba(120,80,30,.045), transparent 70%),
+    repeating-linear-gradient(to bottom, transparent 0 21px, rgba(70,110,170,.08) 21px 22px)}
+:root[data-board="scraps"] .suspect:hover{transform:rotate(0) translateY(-3px)}
+:root[data-board="scraps"] .suspect .pin{top:-6px}
+:root[data-board="scraps"] .mug{height:40px; width:40px; background:none; overflow:visible}
+:root[data-board="scraps"] .mug-emoji{filter:none}
+:root[data-board="scraps"] .mug-emoji .ico{width:38px; height:38px}
+:root[data-board="scraps"] .plate, :root[data-board="scraps"] .alias{display:none}
+:root[data-board="scraps"] .suspect h3{font-size:20px; margin:0}
+:root[data-board="scraps"] .suspect dl{flex-direction:row; gap:14px; margin-top:3px}
+:root[data-board="scraps"] .suspect dt{font-size:10px}
+:root[data-board="scraps"] .suspect dd{font-size:14px}
+:root[data-board="scraps"] .suspect .stamp{font-size:9px; top:4px; right:6px; padding:3px 5px 2px; transform:rotate(8deg); background:none}
+:root[data-board="scraps"] .suspect:nth-child(4n+1)::before{clip-path:polygon(0.0% 0.5%,9.3% 0.8%,18.9% 1.4%,25.3% 0.0%,36.3% 0.6%,43.7% 2.2%,52.5% 1.8%,61.4% 1.4%,68.3% 1.4%,79.5% 1.2%,90.0% 1.5%,96.3% 1.7%,97.9% 0.1%,99.5% 6.0%,98.9% 16.3%,98.9% 29.5%,97.6% 42.9%,97.8% 55.5%,99.5% 69.1%,96.5% 76.7%,99.9% 85.3%,98.5% 95.3%,100.0% 96.1%,95.5% 94.8%,90.1% 96.7%,83.5% 97.5%,76.8% 98.9%,69.8% 97.4%,66.2% 98.9%,59.3% 99.2%,54.0% 97.7%,50.2% 98.7%,44.9% 94.3%,41.6% 98.8%,34.7% 92.7%,28.5% 95.3%,24.9% 94.4%,18.8% 99.0%,15.6% 96.9%,12.4% 97.7%,8.1% 99.0%,1.2% 96.0%,1.1% 96.0%,2.1% 87.4%,0.7% 79.1%,2.1% 67.9%,0.1% 58.6%,1.1% 43.7%,3.1% 28.0%,1.6% 17.0%,2.3% 4.8%); background-color:#f1e6cb}
+:root[data-board="scraps"] .suspect:nth-child(4n+2)::before{clip-path:polygon(0.0% 0.2%,10.2% 1.4%,21.9% 0.6%,29.4% 1.6%,39.3% 0.7%,49.4% 0.9%,60.1% 0.3%,67.5% 2.0%,75.6% 0.6%,86.4% 1.4%,93.3% 1.2%,97.5% 1.3%,96.5% 6.0%,96.3% 15.4%,99.9% 23.8%,100.0% 33.6%,98.4% 43.7%,98.7% 56.8%,98.4% 64.6%,96.7% 76.0%,99.5% 83.7%,96.8% 94.3%,100.0% 93.7%,93.8% 96.0%,90.4% 98.5%,87.0% 94.2%,83.9% 97.9%,80.5% 96.2%,77.1% 95.8%,71.4% 96.3%,66.5% 95.9%,61.8% 96.8%,58.4% 95.8%,54.5% 98.9%,47.7% 92.5%,44.1% 97.6%,38.8% 92.2%,33.0% 99.6%,28.3% 94.8%,23.1% 99.5%,19.0% 94.4%,15.3% 97.0%,10.4% 94.0%,5.8% 92.3%,1.6% 99.9%,1.0% 96.0%,1.3% 80.5%,0.1% 70.5%,0.7% 61.3%,3.1% 51.5%,0.9% 41.4%,3.2% 28.5%,2.7% 18.2%,2.0% 7.3%); background-color:#efe4c7}
+:root[data-board="scraps"] .suspect:nth-child(4n+3)::before{clip-path:polygon(0.0% 0.8%,11.6% 1.9%,18.8% 1.9%,28.7% 0.1%,40.4% 0.6%,48.2% 0.9%,57.7% 0.3%,67.9% 1.8%,76.9% 1.7%,86.7% 1.8%,93.8% 0.8%,97.3% 1.9%,98.5% 6.0%,98.3% 13.7%,96.8% 23.6%,97.8% 31.7%,98.3% 39.2%,96.5% 49.8%,96.2% 62.9%,99.3% 71.1%,97.7% 79.7%,97.7% 90.6%,100.0% 96.0%,95.1% 92.5%,88.8% 94.3%,85.6% 95.3%,79.4% 97.0%,74.5% 95.8%,70.6% 96.9%,66.2% 92.5%,62.7% 92.7%,57.0% 99.1%,51.0% 93.8%,47.4% 99.6%,42.9% 93.3%,37.6% 96.9%,32.4% 95.6%,28.2% 96.0%,23.4% 97.5%,18.6% 94.8%,11.6% 92.9%,5.6% 95.3%,2.5% 96.0%,2.1% 83.5%,0.1% 73.6%,0.9% 59.7%,2.8% 50.8%,0.1% 38.0%,0.6% 25.9%,0.9% 11.0%); background-color:#f2e9d3}
+:root[data-board="scraps"] .suspect:nth-child(4n+4)::before{clip-path:polygon(0.0% 0.7%,11.9% 2.1%,23.4% 1.7%,34.7% 0.0%,44.4% 0.5%,54.8% 1.0%,64.2% 1.2%,73.6% 1.8%,85.5% 0.8%,96.3% 2.0%,97.4% 1.0%,99.1% 6.0%,96.7% 16.7%,97.3% 28.6%,96.7% 41.8%,97.5% 53.0%,96.6% 66.9%,97.7% 80.0%,96.8% 89.6%,100.0% 99.4%,93.0% 99.5%,87.6% 93.9%,82.5% 97.2%,78.3% 99.9%,75.0% 93.9%,71.2% 93.3%,67.9% 93.9%,63.4% 99.5%,58.3% 97.0%,53.9% 93.4%,48.6% 97.8%,45.3% 97.2%,41.4% 97.5%,37.0% 93.2%,33.5% 98.3%,28.3% 92.7%,21.7% 94.2%,17.6% 92.0%,13.4% 96.5%,6.8% 94.4%,1.8% 92.6%,1.1% 96.0%,0.9% 85.0%,3.4% 70.4%,1.6% 61.3%,2.6% 52.5%,0.4% 37.2%,1.1% 23.8%,2.0% 12.2%); background-color:#ede1c2}
+
+/* потерпілий — більший клаптик, щоб виділявся над підозрюваними */
+html:root[data-board="scraps"]:not([data-board="big"]) .victim{width:min(340px,100%); padding:24px 22px 28px; margin-bottom:64px}
+html:root[data-board="scraps"]:not([data-board="big"]) .v-emoji .ico{width:84px; height:84px}
+html:root[data-board="scraps"]:not([data-board="big"]) .v-label{font-size:13px; margin-top:8px}
+html:root[data-board="scraps"]:not([data-board="big"]) .v-name{font-size:40px}
+html:root[data-board="scraps"]:not([data-board="big"]) .v-loss{font-size:18px; margin-top:6px}
+
+/* ================= шрифти: лише два + рукопис =================
+   Playfair Display — заголовки й імена; IBM Plex Sans — увесь інший текст і цифри;
+   Caveat — тільки рукописне (стікер, підпис). Моноширинний лишився лише для зачорнених сум. */
+:root{--mono:"IBM Plex Sans", system-ui, sans-serif; --body:"IBM Plex Sans", system-ui, sans-serif}
+body{font-variant-numeric:tabular-nums}
+.tw{font-family:"IBM Plex Mono", ui-monospace, monospace}
+.tape + .hint{font:400 16px/1.45 var(--body); font-style:normal}
+.tape::before{font:600 12px/1 var(--body); letter-spacing:.16em}
+.case-no{font:600 13px var(--body); letter-spacing:.14em}
+.facts dt, .chips-label, .dates label, .pay-table th{font-weight:600; letter-spacing:.08em}
+.facts dd{font-size:16px}
+.suspect h3{font-style:normal; font-weight:700}
+html:root[data-board] .suspect dt{font-size:11px; font-weight:600; letter-spacing:.06em}
+html:root[data-board] .suspect dd{font-weight:700}
+html:root[data-board="scraps"]:not([data-board="big"]) .v-name{font-style:normal}
+.v-label{font-weight:600; letter-spacing:.18em}
+.plate{font-weight:600; letter-spacing:.06em}
+.t-m{letter-spacing:.06em}
+.empty, .empty-month{font:600 18px/1.4 var(--body); font-style:normal}
+.signature{font:600 40px/1 'Caveat', 'Segoe Script', cursive; color:#2a3a6b}
+.stamp{font-family:var(--body); font-weight:700; letter-spacing:.16em}
+
+/* потерпілий — наліпка «Нерозкрита справа» (як етикетка на пакеті з доказами) */
+#victim.vlabel{width:min(440px,100%); padding:0; margin:0 auto 64px; text-align:left; background:#fdfbf6; border-radius:10px;
+  box-shadow:0 1px 0 rgba(36,28,18,.1), 0 10px 24px rgba(70,45,15,.28); filter:none; transform:rotate(-1.5deg)}
+#victim.vlabel::before{display:none}
+#victim.vlabel .pin.top{display:none}
+#victim.vlabel .pin.bottom{bottom:-8px}
+.vl-head{display:flex; align-items:center; gap:12px; padding:14px 18px 6px; font:700 13px/1 var(--body); letter-spacing:.14em; text-transform:uppercase; color:var(--wax); white-space:nowrap}
+.vl-head::before, .vl-head::after{content:""; flex:1; height:4px; border-radius:2px; background:var(--wax)}
+.vl-body{display:grid; grid-template-columns:116px minmax(0,1fr); gap:16px; align-items:center; padding:8px 18px 20px}
+.vl-photo{aspect-ratio:4/5; display:grid; place-items:center; border:1.5px solid rgba(36,28,18,.35);
+  background:repeating-linear-gradient(45deg, rgba(36,28,18,.045) 0 2px, transparent 2px 6px), #f4f1ea}
+.vl-photo .ico{width:96px; height:96px; filter:grayscale(1) contrast(.9) opacity(.82)}
+.vl-fields{margin:0; display:grid; gap:7px}
+.vl-fields div{display:grid; grid-template-columns:84px minmax(0,1fr); align-items:end; gap:8px}
+.vl-fields dt{font:500 13px/1.2 var(--body); color:var(--ink-soft)}
+.vl-fields dd{margin:0; padding:0 2px 1px; font:500 26px/1.15 'Caveat', 'Segoe Script', cursive; color:#2a3a6b;
+  border-bottom:1.5px solid rgba(36,28,18,.4); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.vl-fields dd .tw{font-size:16px}
+@media (max-width:480px){
+  .vl-body{grid-template-columns:84px minmax(0,1fr); gap:12px; padding:6px 14px 16px}
+  .vl-photo .ico{width:70px; height:70px}
+  .vl-fields div{grid-template-columns:70px minmax(0,1fr)}
+  .vl-fields dd{font-size:23px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <header class="folder">
+    <div class="case-no" id="caseNo"></div>
+    <h1 id="title">Про зниклі гроші</h1>
+    <p class="lead" data-i18n="lead"></p>
+    <dl class="facts" id="facts"></dl>
+    <span class="stamp" id="coverStamp">Цілком таємно</span>
+    <div class="sticky" aria-hidden="true" data-i18n="sticky"></div>
+  </header>
+
+  <nav class="filters paper" data-i18n-aria="filters">
+    <div class="chips dates" id="chipsDates">
+      <span class="chips-label" data-i18n="chDates"></span>
+      <label><span data-i18n="dFrom"></span> <input type="date" class="date-in" id="dFrom"></label>
+      <label><span data-i18n="dTo"></span> <input type="date" class="date-in" id="dTo"></label>
+    </div>
+    <div class="chips" id="chipsCard"></div>
+    <div class="chips" id="chipsView"></div>
+    <div class="priv-row">
+      <span class="priv-right">
+        <a class="chip schema-link" href="schema.html" data-i18n="schemaLink"></a>
+        <a class="chip schema-link" href="income.html" data-i18n="incomeLink"></a>
+      </span>
+      <div class="priv-right">
+        <div class="lang" role="group" aria-label="Мова / Language">
+          <button data-lang="uk" aria-pressed="true" lang="uk">UA</button><button data-lang="en" aria-pressed="false" lang="en">EN</button>
+        </div>
+        <button class="priv" id="priv" aria-pressed="false" data-i18n-title="privTitle">
+          <span class="knob" aria-hidden="true"></span><span data-i18n="priv"></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <section class="section" aria-labelledby="h-board">
+    <h2 class="tape" id="h-board" data-i18n="hBoard"></h2>
+    <span class="hint" data-i18n="hintBoard"></span>
+    <div class="board" id="board">
+      <svg class="strings" id="strings" aria-hidden="true"></svg>
+      <div class="victim paper" id="victim"></div>
+      <div class="suspects" id="suspects"></div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="h-forensics">
+    <h2 class="tape" id="h-forensics" data-i18n="hForensics"></h2>
+    <span class="hint" data-i18n="hintForensics"></span>
+    <div class="sheet paper"><ul class="forensics" id="forensics"></ul></div>
+  </section>
+
+  <section class="section" aria-labelledby="h-timeline">
+    <h2 class="tape" id="h-timeline" data-i18n="hTimeline"></h2>
+    <span class="hint" data-i18n="hintTimeline"></span>
+    <div class="sheet paper"><ul class="timeline" id="timeline"></ul></div>
+  </section>
+
+  <section class="section" id="verdictSec" aria-labelledby="h-verdict">
+    <h2 class="tape" id="h-verdict" data-i18n="hVerdict"></h2>
+    <span class="hint" id="verdictHint">спільні карти, все навпіл</span>
+    <article class="doc paper" id="verdict"></article>
+  </section>
+
+  <section class="section" aria-labelledby="h-log">
+    <h2 class="tape" id="h-log" data-i18n="hLog"></h2>
+    <span class="hint" data-i18n="hintLog"></span>
+    <div class="sheet paper">
+      <div class="log-head">
+        <div class="log-filters">
+          <input class="search" id="search" type="search" data-i18n-ph="searchPh" data-i18n-aria="searchAria">
+          <select class="search cat-select" id="catFilter" data-i18n-aria="catAria"></select>
+        </div>
+        <span class="log-count" id="logCount"></span>
+      </div>
+      <ul class="log" id="log"></ul>
+      <button class="more" id="more" hidden data-i18n="more"></button>
+    </div>
+  </section>
+
+  <footer><div class="paper" id="footer"></div></footer>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const D = {"owner": "Міс Марпл", "city": {"uk": "Сент-Мері-Мід", "en": "St Mary Mead"}, "generated": "2026-11-18 21:56", "tx": [{"d": "2026-11-13", "t": "11:57", "h": "Доллі", "c": "Карта 3 (спільна)", "cat": "Дім і побут", "sub": null, "m": "Dollarama", "desc": "DOLLARAMA #1288", "a": 4.06, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-11-12", "t": "19:20", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Розваги", "sub": null, "m": "Cineplex", "desc": "CINEPLEX SCOTIABANK", "a": 31.5, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-11-12", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Підписки", "sub": null, "m": "Spotify", "desc": "SPOTIFY P2A9", "a": 6.99, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-11-11", "t": "17:02", "h": "Доллі", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 23.85, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-11-11", "t": "14:03", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Дім і побут", "sub": null, "m": "IKEA", "desc": "IKEA ETOBICOKE", "a": 32.4, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-11-11", "t": "07:26", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 4.73, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-11-09", "t": "19:08", "h": "Доллі", "c": "Карта 3 (спільна)", "cat": "Кафе й ресторани", "sub": null, "m": "Sushi Shop Queen St", "desc": "SUSHI SHOP QUEEN ST", "a": 20.66, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-11-09", "t": "15:35", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Дім і побут", "sub": null, "m": "IKEA", "desc": "IKEA ETOBICOKE", "a": 89.0, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-11-08", "t": null, "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Комунальні й зв'язок", "sub": null, "m": "Toronto Hydro", "desc": "TORONTO HYDRO", "a": 32.0, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-11-07", "t": "22:37", "h": "Міс Марпл", "c": "Карта 1", "cat": "Інше", "sub": null, "m": "Amazon", "desc": "AMAZON.CA*2K4", "a": 19.9, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-11-07", "t": "13:10", "h": "Міс Марпл", "c": "Карта 1", "cat": "Одяг і взуття", "sub": null, "m": "Winners", "desc": "WINNERS #217", "a": 119.99, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-11-05", "t": "19:13", "h": "Доллі", "c": "Карта 3 (спільна)", "cat": "Розваги", "sub": null, "m": "Cineplex", "desc": "CINEPLEX SCOTIABANK", "a": 21.76, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-11-05", "t": "16:19", "h": "Міс Марпл", "c": "Карта 1", "cat": "Краса й догляд", "sub": null, "m": "Sephora", "desc": "SEPHORA CANADA", "a": 40.11, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-11-05", "t": "08:28", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 3.93, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-11-05", "t": "08:21", "h": "Міс Марпл", "c": "Карта 1", "cat": "Транспорт", "sub": "Громадський транспорт", "m": "Presto", "desc": "PRESTO AUTOLOAD", "a": 18.57, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-11-05", "t": null, "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Підписки", "sub": null, "m": "Netflix", "desc": "NETFLIX.COM", "a": 9.99, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-11-03", "t": "13:07", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 15.22, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-11-03", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Спорт", "sub": null, "m": "GoodLife Fitness", "desc": "GOODLIFE FITNESS", "a": 29.99, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-11-02", "t": "08:22", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Balzac's", "desc": "BALZACS COFFEE", "a": 5.16, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-11-01", "t": "18:26", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 35.11, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-11-01", "t": null, "h": "Міс Марпл", "c": "Карта 2", "cat": "Житло", "sub": "Оренда", "m": "Оренда", "desc": "SEND E-TFR ***R7Q", "a": 450.0, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-10-29", "t": "13:55", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Здоров'я", "sub": "Аптека", "m": "Shoppers Drug Mart", "desc": "SHOPPERS DRUG MART #0812", "a": 16.23, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-10-28", "t": "09:05", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 4.52, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-10-28", "t": "08:38", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Starbucks", "desc": "STARBUCKS 04512", "a": 6.36, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-10-28", "t": "07:30", "h": "Міс Марпл", "c": "Карта 1", "cat": "Транспорт", "sub": "Громадський транспорт", "m": "Presto", "desc": "PRESTO AUTOLOAD", "a": 15.34, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-10-27", "t": "08:50", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Balzac's", "desc": "BALZACS COFFEE", "a": 4.18, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-10-25", "t": null, "h": "Міс Марпл", "c": "Карта 2", "cat": "Допомога родині", "sub": null, "m": "Реймонд", "desc": "Transfer out to Raymond W.", "a": 60.0, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-10-23", "t": "18:03", "h": "Доллі", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 37.29, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-10-22", "t": "07:07", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Balzac's", "desc": "BALZACS COFFEE", "a": 5.5, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-10-21", "t": "20:40", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Розваги", "sub": null, "m": "Cineplex", "desc": "CINEPLEX SCOTIABANK", "a": 15.74, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-10-20", "t": "20:28", "h": "Доллі", "c": "Карта 3 (спільна)", "cat": "Кафе й ресторани", "sub": null, "m": "Pizza Nova #112", "desc": "PIZZA NOVA #112", "a": 18.3, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-10-20", "t": "13:17", "h": "Міс Марпл", "c": "Карта 1", "cat": "Одяг і взуття", "sub": null, "m": "Uniqlo", "desc": "UNIQLO EATON CENTRE", "a": 49.61, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-10-20", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Комунальні й зв'язок", "sub": null, "m": "Fizz", "desc": "FIZZ MOBILE", "a": 25.0, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-10-19", "t": "18:33", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Sushi Shop Queen St", "desc": "SUSHI SHOP QUEEN ST", "a": 23.68, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-10-19", "t": "15:21", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Дім і побут", "sub": null, "m": "IKEA", "desc": "IKEA ETOBICOKE", "a": 30.74, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-10-18", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Підписки", "sub": null, "m": "Google One", "desc": "GOOGLE ONE", "a": 3.15, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-10-17", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Комісії й відсотки", "sub": null, "m": "Банк", "desc": "PURCHASE INTEREST", "a": 3.12, "k": "interest", "s": 0.0, "o": null, "oc": null}, {"d": "2026-10-16", "t": "14:28", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "T&T", "desc": "T&T SUPERMARKET #021", "a": 16.39, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-10-15", "t": "18:42", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Здоров'я", "sub": "Аптека", "m": "Shoppers Drug Mart", "desc": "SHOPPERS DRUG MART #0812", "a": 14.85, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-10-14", "t": "14:09", "h": "Доллі", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 42.85, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-10-12", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Підписки", "sub": null, "m": "Spotify", "desc": "SPOTIFY P2A9", "a": 6.99, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-10-11", "t": "22:44", "h": "Міс Марпл", "c": "Карта 1", "cat": "Інше", "sub": null, "m": "Amazon", "desc": "AMAZON.CA*2K4", "a": 37.63, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-10-11", "t": "20:54", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Кафе й ресторани", "sub": null, "m": "Sushi Shop Queen St", "desc": "SUSHI SHOP QUEEN ST", "a": 16.52, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-10-08", "t": "15:24", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 23.03, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-10-08", "t": "07:54", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 5.76, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-10-08", "t": null, "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Комунальні й зв'язок", "sub": null, "m": "Toronto Hydro", "desc": "TORONTO HYDRO", "a": 32.0, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-10-07", "t": "00:56", "h": "Міс Марпл", "c": "Карта 1", "cat": "Інше", "sub": null, "m": "Amazon", "desc": "AMAZON.CA*2K4", "a": 17.6, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-10-06", "t": "07:39", "h": "Міс Марпл", "c": "Карта 1", "cat": "Транспорт", "sub": "Громадський транспорт", "m": "Presto", "desc": "PRESTO AUTOLOAD", "a": 19.91, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-10-05", "t": "16:10", "h": "Доллі", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "Costco", "desc": "COSTCO WHOLESALE W535", "a": 55.89, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-10-05", "t": "11:48", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "Farm Boy", "desc": "FARM BOY #29 TORONTO", "a": 19.95, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-10-05", "t": null, "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Підписки", "sub": null, "m": "Netflix", "desc": "NETFLIX.COM", "a": 9.99, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-10-04", "t": "15:20", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 37.86, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-10-03", "t": "15:19", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Дім і побут", "sub": null, "m": "Dollarama", "desc": "DOLLARAMA #1288", "a": 4.78, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-10-03", "t": "09:11", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Starbucks", "desc": "STARBUCKS 04512", "a": 7.13, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-10-03", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Спорт", "sub": null, "m": "GoodLife Fitness", "desc": "GOODLIFE FITNESS", "a": 29.99, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-10-02", "t": "12:00", "h": "Міс Марпл", "c": "Карта 2", "cat": "Благодійність", "sub": null, "m": "Фонд Допомоги", "desc": "FONDACIYA DOPOMOGY", "a": 20.0, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-10-02", "t": "09:42", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 5.27, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-10-01", "t": "19:56", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Кафе й ресторани", "sub": null, "m": "Sushi Shop Queen St", "desc": "SUSHI SHOP QUEEN ST", "a": 18.53, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-10-01", "t": null, "h": "Міс Марпл", "c": "Карта 2", "cat": "Житло", "sub": "Оренда", "m": "Оренда", "desc": "SEND E-TFR ***R7Q", "a": 450.0, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-29", "t": "12:37", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "T&T", "desc": "T&T SUPERMARKET #021", "a": 13.66, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-09-28", "t": "12:52", "h": "Доллі", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "T&T", "desc": "T&T SUPERMARKET #021", "a": 33.71, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-09-27", "t": "16:05", "h": "Доллі", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 13.34, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-09-25", "t": "23:21", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Uber Eats", "desc": "UBEREATS TORONTO", "a": 22.5, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-25", "t": "08:19", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 2.32, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-25", "t": "00:02", "h": "Міс Марпл", "c": "Карта 1", "cat": "Транспорт", "sub": "Таксі", "m": "Uber", "desc": "UBER *TRIP HELP.UBER.COM", "a": 10.71, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-25", "t": null, "h": "Міс Марпл", "c": "Карта 2", "cat": "Допомога родині", "sub": null, "m": "Реймонд", "desc": "Transfer out to Raymond W.", "a": 60.0, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-24", "t": "12:16", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 36.05, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-09-24", "t": "08:03", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Balzac's", "desc": "BALZACS COFFEE", "a": 4.97, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-23", "t": "12:29", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "Farm Boy", "desc": "FARM BOY #29 TORONTO", "a": 13.27, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-09-21", "t": "10:05", "h": "Міс Марпл", "c": "Карта 1", "cat": "Інше", "sub": null, "m": "Amazon", "desc": "AMAZON.CA*2K4 RETURN", "a": -18.5, "k": "refund", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-20", "t": "18:54", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Дім і побут", "sub": null, "m": "Dollarama", "desc": "DOLLARAMA #1288", "a": 7.19, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-09-20", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Комунальні й зв'язок", "sub": null, "m": "Fizz", "desc": "FIZZ MOBILE", "a": 25.0, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-18", "t": "08:33", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 3.32, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-18", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Підписки", "sub": null, "m": "Google One", "desc": "GOOGLE ONE", "a": 3.15, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-16", "t": "09:02", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Balzac's", "desc": "BALZACS COFFEE", "a": 5.41, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-15", "t": "22:59", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Uber Eats", "desc": "UBEREATS TORONTO", "a": 17.44, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-14", "t": "17:38", "h": "Доллі", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "Farm Boy", "desc": "FARM BOY #29 TORONTO", "a": 15.26, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-09-14", "t": "14:22", "h": "Міс Марпл", "c": "Карта 1", "cat": "Техніка", "sub": null, "m": "Best Buy", "desc": "BEST BUY #946", "a": 129.99, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-14", "t": "08:49", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 5.85, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-13", "t": "07:57", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 3.92, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-12", "t": "22:24", "h": "Міс Марпл", "c": "Карта 1", "cat": "Транспорт", "sub": "Таксі", "m": "Uber", "desc": "UBER *TRIP HELP.UBER.COM", "a": 11.29, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-12", "t": "17:20", "h": "Доллі", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 16.74, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-09-12", "t": "08:02", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Starbucks", "desc": "STARBUCKS 04512", "a": 7.0, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-12", "t": "00:41", "h": "Міс Марпл", "c": "Карта 1", "cat": "Інше", "sub": null, "m": "Amazon", "desc": "AMAZON.CA*2K4", "a": 13.41, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-12", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Підписки", "sub": null, "m": "Spotify", "desc": "SPOTIFY P2A9", "a": 6.99, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-11", "t": "15:14", "h": "Доллі", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "Farm Boy", "desc": "FARM BOY #29 TORONTO", "a": 22.03, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-09-11", "t": "09:00", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Starbucks", "desc": "STARBUCKS 04512", "a": 5.96, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-10", "t": "08:29", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 2.73, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-09", "t": "09:50", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Balzac's", "desc": "BALZACS COFFEE", "a": 5.0, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-09", "t": "08:30", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 4.92, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-08", "t": null, "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Комунальні й зв'язок", "sub": null, "m": "Toronto Hydro", "desc": "TORONTO HYDRO", "a": 32.0, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-09-07", "t": "16:21", "h": "Доллі", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 42.26, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-09-05", "t": "07:08", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Starbucks", "desc": "STARBUCKS 04512", "a": 7.9, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-05", "t": null, "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Підписки", "sub": null, "m": "Netflix", "desc": "NETFLIX.COM", "a": 9.99, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-09-04", "t": "22:15", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Uber Eats", "desc": "UBEREATS TORONTO", "a": 28.65, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-03", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Спорт", "sub": null, "m": "GoodLife Fitness", "desc": "GOODLIFE FITNESS", "a": 29.99, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-09-01", "t": "19:06", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Кафе й ресторани", "sub": null, "m": "Pizza Nova #112", "desc": "PIZZA NOVA #112", "a": 21.11, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-09-01", "t": null, "h": "Міс Марпл", "c": "Карта 2", "cat": "Житло", "sub": "Оренда", "m": "Оренда", "desc": "SEND E-TFR ***R7Q", "a": 450.0, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-08-31", "t": "14:51", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 36.6, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-08-30", "t": "07:03", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Balzac's", "desc": "BALZACS COFFEE", "a": 5.97, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-08-29", "t": "20:44", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Sushi Shop Queen St", "desc": "SUSHI SHOP QUEEN ST", "a": 33.97, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-08-29", "t": "14:13", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 15.25, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-08-29", "t": "09:07", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 3.49, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-08-27", "t": "12:28", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 23.31, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-08-27", "t": "08:24", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 3.22, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-08-26", "t": "13:57", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 14.5, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-08-25", "t": "12:02", "h": "Міс Марпл", "c": "Карта 1", "cat": "Одяг і взуття", "sub": null, "m": "Winners", "desc": "WINNERS #217", "a": 25.15, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-08-25", "t": "07:01", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 4.0, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-08-25", "t": null, "h": "Міс Марпл", "c": "Карта 2", "cat": "Допомога родині", "sub": null, "m": "Реймонд", "desc": "Transfer out to Raymond W.", "a": 60.0, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-08-24", "t": "20:09", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Кафе й ресторани", "sub": null, "m": "Pizza Nova #112", "desc": "PIZZA NOVA #112", "a": 25.77, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-08-24", "t": "00:48", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Uber Eats", "desc": "UBEREATS TORONTO", "a": 20.51, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-08-23", "t": "13:09", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "Costco", "desc": "COSTCO WHOLESALE W535", "a": 96.7, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-08-22", "t": "17:20", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 40.65, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-08-21", "t": "17:57", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 39.04, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-08-20", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Комунальні й зв'язок", "sub": null, "m": "Fizz", "desc": "FIZZ MOBILE", "a": 25.0, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-08-19", "t": "09:28", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 3.08, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-08-18", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Підписки", "sub": null, "m": "Google One", "desc": "GOOGLE ONE", "a": 3.15, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-08-16", "t": "19:53", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Розваги", "sub": null, "m": "Cineplex", "desc": "CINEPLEX SCOTIABANK", "a": 13.79, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-08-14", "t": "16:08", "h": "Доллі", "c": "Карта 3 (спільна)", "cat": "Дім і побут", "sub": null, "m": "Dollarama", "desc": "DOLLARAMA #1288", "a": 11.03, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-08-12", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Підписки", "sub": null, "m": "Spotify", "desc": "SPOTIFY P2A9", "a": 6.99, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-08-10", "t": "07:56", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Starbucks", "desc": "STARBUCKS 04512", "a": 4.3, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-08-10", "t": "00:32", "h": "Міс Марпл", "c": "Карта 1", "cat": "Інше", "sub": null, "m": "Amazon", "desc": "AMAZON.CA*2K4", "a": 11.36, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-08-09", "t": "16:45", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "T&T", "desc": "T&T SUPERMARKET #021", "a": 32.57, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-08-08", "t": "09:33", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 3.29, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-08-08", "t": null, "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Комунальні й зв'язок", "sub": null, "m": "Toronto Hydro", "desc": "TORONTO HYDRO", "a": 32.0, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-08-07", "t": "15:20", "h": "Доллі", "c": "Карта 3 (спільна)", "cat": "Дім і побут", "sub": null, "m": "Dollarama", "desc": "DOLLARAMA #1288", "a": 3.05, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-08-06", "t": "09:25", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 4.04, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-08-05", "t": null, "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Підписки", "sub": null, "m": "Netflix", "desc": "NETFLIX.COM", "a": 9.99, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-08-04", "t": "11:01", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "Farm Boy", "desc": "FARM BOY #29 TORONTO", "a": 11.87, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-08-04", "t": "08:01", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 5.77, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-08-03", "t": "08:32", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 4.37, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-08-03", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Спорт", "sub": null, "m": "GoodLife Fitness", "desc": "GOODLIFE FITNESS", "a": 29.99, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-08-02", "t": "14:14", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "Farm Boy", "desc": "FARM BOY #29 TORONTO", "a": 12.47, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-08-01", "t": null, "h": "Міс Марпл", "c": "Карта 2", "cat": "Житло", "sub": "Оренда", "m": "Оренда", "desc": "SEND E-TFR ***R7Q", "a": 450.0, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-31", "t": "13:46", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 15.76, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-07-30", "t": "15:13", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 15.57, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-07-30", "t": "08:00", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 2.63, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-29", "t": "16:55", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 22.58, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-07-29", "t": "08:12", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 5.51, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-28", "t": "08:44", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 2.13, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-27", "t": "16:07", "h": "Міс Марпл", "c": "Карта 1", "cat": "Здоров'я", "sub": "Аптека", "m": "Shoppers Drug Mart", "desc": "SHOPPERS DRUG MART #0812", "a": 14.25, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-27", "t": "09:14", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 5.78, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-27", "t": "07:24", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Balzac's", "desc": "BALZACS COFFEE", "a": 4.18, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-25", "t": "21:52", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Sushi Shop Queen St", "desc": "SUSHI SHOP QUEEN ST", "a": 21.16, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-25", "t": null, "h": "Міс Марпл", "c": "Карта 2", "cat": "Допомога родині", "sub": null, "m": "Реймонд", "desc": "Transfer out to Raymond W.", "a": 60.0, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-23", "t": "22:00", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Uber Eats", "desc": "UBEREATS TORONTO", "a": 18.95, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-23", "t": "07:01", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Starbucks", "desc": "STARBUCKS 04512", "a": 4.98, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-22", "t": "11:56", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "Costco", "desc": "COSTCO WHOLESALE W535", "a": 41.11, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-07-22", "t": "07:49", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Starbucks", "desc": "STARBUCKS 04512", "a": 4.07, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-20", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Комунальні й зв'язок", "sub": null, "m": "Fizz", "desc": "FIZZ MOBILE", "a": 25.0, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-18", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Підписки", "sub": null, "m": "Google One", "desc": "GOOGLE ONE", "a": 3.15, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-16", "t": "19:01", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Sushi Shop Queen St", "desc": "SUSHI SHOP QUEEN ST", "a": 27.15, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-16", "t": "18:20", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 21.37, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-07-16", "t": "08:48", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 3.74, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-14", "t": "19:12", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Кафе й ресторани", "sub": null, "m": "Pizza Nova #112", "desc": "PIZZA NOVA #112", "a": 17.44, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-07-13", "t": "16:35", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 34.32, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-07-13", "t": "13:27", "h": "Міс Марпл", "c": "Карта 1", "cat": "Одяг і взуття", "sub": null, "m": "Uniqlo", "desc": "UNIQLO EATON CENTRE", "a": 27.67, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-12", "t": "12:14", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 17.83, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-07-12", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Підписки", "sub": null, "m": "Spotify", "desc": "SPOTIFY P2A9", "a": 6.99, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-09", "t": "16:40", "h": "Міс Марпл", "c": "Карта 1", "cat": "Освіта", "sub": null, "m": "Coursera", "desc": "COURSERA.ORG", "a": 49.0, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-08", "t": "17:48", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 43.26, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-07-08", "t": null, "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Комунальні й зв'язок", "sub": null, "m": "Toronto Hydro", "desc": "TORONTO HYDRO", "a": 32.0, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-07-07", "t": "16:42", "h": "Міс Марпл", "c": "Карта 1", "cat": "Здоров'я", "sub": "Аптека", "m": "Shoppers Drug Mart", "desc": "SHOPPERS DRUG MART #0812", "a": 8.01, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-06", "t": "21:39", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Sushi Shop Queen St", "desc": "SUSHI SHOP QUEEN ST", "a": 32.74, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-05", "t": null, "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Підписки", "sub": null, "m": "Netflix", "desc": "NETFLIX.COM", "a": 9.99, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-07-03", "t": "21:40", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Кафе й ресторани", "sub": null, "m": "Pizza Nova #112", "desc": "PIZZA NOVA #112", "a": 22.01, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-07-03", "t": "07:39", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 4.11, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-03", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Спорт", "sub": null, "m": "GoodLife Fitness", "desc": "GOODLIFE FITNESS", "a": 29.99, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-07-02", "t": "18:40", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 25.81, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-07-01", "t": "12:28", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 34.27, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-07-01", "t": null, "h": "Міс Марпл", "c": "Карта 2", "cat": "Житло", "sub": "Оренда", "m": "Оренда", "desc": "SEND E-TFR ***R7Q", "a": 450.0, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-26", "t": "00:04", "h": "Міс Марпл", "c": "Карта 1", "cat": "Інше", "sub": null, "m": "Amazon", "desc": "AMAZON.CA*2K4", "a": 32.58, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-25", "t": "20:53", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Sushi Shop Queen St", "desc": "SUSHI SHOP QUEEN ST", "a": 21.44, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-25", "t": "13:13", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 33.16, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-06-25", "t": "09:57", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 5.65, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-25", "t": null, "h": "Міс Марпл", "c": "Карта 2", "cat": "Допомога родині", "sub": null, "m": "Реймонд", "desc": "Transfer out to Raymond W.", "a": 60.0, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-23", "t": "20:21", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Розваги", "sub": null, "m": "Cineplex", "desc": "CINEPLEX SCOTIABANK", "a": 21.84, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-06-23", "t": "16:56", "h": "Доллі", "c": "Карта 3 (спільна)", "cat": "Дім і побут", "sub": null, "m": "Dollarama", "desc": "DOLLARAMA #1288", "a": 9.51, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-06-20", "t": "23:53", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Uber Eats", "desc": "UBEREATS TORONTO", "a": 26.08, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-20", "t": "16:21", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "Farm Boy", "desc": "FARM BOY #29 TORONTO", "a": 15.64, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-06-20", "t": "13:06", "h": "Доллі", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 12.93, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-06-20", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Комунальні й зв'язок", "sub": null, "m": "Fizz", "desc": "FIZZ MOBILE", "a": 25.0, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-19", "t": "09:07", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Starbucks", "desc": "STARBUCKS 04512", "a": 6.64, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-18", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Підписки", "sub": null, "m": "Google One", "desc": "GOOGLE ONE", "a": 3.15, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-15", "t": "22:23", "h": "Міс Марпл", "c": "Карта 1", "cat": "Транспорт", "sub": "Таксі", "m": "Uber", "desc": "UBER *TRIP HELP.UBER.COM", "a": 11.03, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-15", "t": "16:51", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "Costco", "desc": "COSTCO WHOLESALE W535", "a": 94.07, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-06-15", "t": "09:09", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Balzac's", "desc": "BALZACS COFFEE", "a": 4.49, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-14", "t": "09:37", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 3.23, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-14", "t": "08:34", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Starbucks", "desc": "STARBUCKS 04512", "a": 7.85, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-12", "t": "18:26", "h": "Доллі", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "Farm Boy", "desc": "FARM BOY #29 TORONTO", "a": 13.8, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-06-12", "t": "18:03", "h": "Міс Марпл", "c": "Карта 1", "cat": "Одяг і взуття", "sub": null, "m": "Uniqlo", "desc": "UNIQLO EATON CENTRE", "a": 58.81, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-12", "t": "17:56", "h": "Доллі", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 20.41, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-06-12", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Підписки", "sub": null, "m": "Spotify", "desc": "SPOTIFY P2A9", "a": 6.99, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-10", "t": "16:20", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 37.73, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-06-08", "t": null, "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Комунальні й зв'язок", "sub": null, "m": "Toronto Hydro", "desc": "TORONTO HYDRO", "a": 32.0, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-06-07", "t": "14:30", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "Farm Boy", "desc": "FARM BOY #29 TORONTO", "a": 23.64, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-06-07", "t": "09:57", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 5.83, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-06", "t": "23:43", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Uber Eats", "desc": "UBEREATS TORONTO", "a": 18.86, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-06", "t": "15:32", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 25.6, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-06-06", "t": "08:56", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 2.29, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-05", "t": "16:06", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 18.42, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-06-05", "t": "09:34", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Tim Hortons", "desc": "TIM HORTONS #2241", "a": 5.73, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-05", "t": "07:07", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Starbucks", "desc": "STARBUCKS 04512", "a": 6.48, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-05", "t": null, "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Підписки", "sub": null, "m": "Netflix", "desc": "NETFLIX.COM", "a": 9.99, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-06-03", "t": "00:56", "h": "Міс Марпл", "c": "Карта 1", "cat": "Інше", "sub": null, "m": "Amazon", "desc": "AMAZON.CA*2K4", "a": 27.92, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-03", "t": null, "h": "Міс Марпл", "c": "Карта 1", "cat": "Спорт", "sub": null, "m": "GoodLife Fitness", "desc": "GOODLIFE FITNESS", "a": 29.99, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-02", "t": "18:27", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "T&T", "desc": "T&T SUPERMARKET #021", "a": 12.27, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-06-01", "t": "17:50", "h": "Міс Марпл", "c": "Карта 3 (спільна)", "cat": "Продукти", "sub": null, "m": "No Frills", "desc": "NO FRILLS #3121 TORONTO", "a": 30.89, "k": "purchase", "s": 0.5, "o": null, "oc": null}, {"d": "2026-06-01", "t": "07:18", "h": "Міс Марпл", "c": "Карта 1", "cat": "Кафе й ресторани", "sub": null, "m": "Balzac's", "desc": "BALZACS COFFEE", "a": 6.45, "k": "purchase", "s": 0.0, "o": null, "oc": null}, {"d": "2026-06-01", "t": null, "h": "Міс Марпл", "c": "Карта 2", "cat": "Житло", "sub": "Оренда", "m": "Оренда", "desc": "SEND E-TFR ***R7Q", "a": 450.0, "k": "purchase", "s": 0.0, "o": null, "oc": null}], "debtMonthly": [{"month": "2026-07", "person": "Доллі", "paid": 411.9, "share": 205.95, "repaid": 205.95, "owes": 0.0}, {"month": "2026-08", "person": "Доллі", "paid": 353.32, "share": 176.66, "repaid": 176.66, "owes": 0.0}, {"month": "2026-09", "person": "Доллі", "paid": 418.59, "share": 209.3, "repaid": 209.3, "owes": 0.0}, {"month": "2026-10", "person": "Доллі", "paid": 276.61, "share": 138.31, "repaid": 138.31, "owes": 0.0}, {"month": "2026-11", "person": "Доллі", "paid": 410.94, "share": 205.47, "repaid": 60.0, "owes": 145.47}], "payments": [{"d": "2026-11-03", "card": "Карта 3 (спільна)", "paid": 410.94, "share": 205.47}, {"d": "2026-10-03", "card": "Карта 3 (спільна)", "paid": 276.61, "share": 138.31}, {"d": "2026-09-03", "card": "Карта 3 (спільна)", "paid": 418.59, "share": 209.3}, {"d": "2026-08-03", "card": "Карта 3 (спільна)", "paid": 353.32, "share": 176.66}, {"d": "2026-07-03", "card": "Карта 3 (спільна)", "paid": 411.9, "share": 205.95}], "repayments": [{"d": "2026-11-09", "person": "Доллі", "a": 60.0, "month": "2026-11", "note": "e-transfer"}, {"d": "2026-10-07", "person": "Доллі", "a": 138.31, "month": "2026-10", "note": "e-transfer"}, {"d": "2026-09-10", "person": "Доллі", "a": 209.3, "month": "2026-09", "note": "e-transfer"}, {"d": "2026-08-06", "person": "Доллі", "a": 176.66, "month": "2026-08", "note": "e-transfer"}, {"d": "2026-07-05", "person": "Доллі", "a": 205.95, "month": "2026-07", "note": "e-transfer"}], "splitCards": ["Карта 3 (спільна)"], "splitWith": "Доллі", "pending": [{"card": "Карта 3 (спільна)", "a": 315.55, "share": 0.5}]};
+const S = {month:'all', card:'all', view:'all', q:'', logCat:'all', shown:30, priv:false, lang:'uk'};
+try { S.priv = localStorage.getItem('privacy') === '1'; S.lang = localStorage.getItem('lang') === 'en' ? 'en' : 'uk'; S.view = localStorage.getItem('view') === 'mine' ? 'mine' : 'all'; } catch {}
+
+const MON = ['січень','лютий','березень','квітень','травень','червень','липень','серпень','вересень','жовтень','листопад','грудень'];
+const MON_LOC = ['січні','лютому','березні','квітні','травні','червні','липні','серпні','вересні','жовтні','листопаді','грудні'];
+const MON_S = ['січ','лют','бер','кві','тра','чер','лип','сер','вер','жов','лис','гру'];
+const MON_EN = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MON_EN_S = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const CAT = {
+  'Продукти':            {e:'🥦', c:'#9BDDB8', q:'їжа сама себе не купить', al:'годувальник банди'},
+  'Кафе й ресторани':    {e:'🍕', c:'#FFB5C7', q:'готувати? не чули',        al:'спокусник'},
+  "Здоров'я":            {e:'💊', c:'#B0D3FF', q:'інвестиції в організм',    al:'аптекар'},
+  'Дім і побут':         {e:'🧺', c:'#FFDB8F', q:'«це ж для дому»',          al:'майстер дрібниць'},
+  'Одяг і взуття':       {e:'👗', c:'#D8BEFA', q:'модний вирок',             al:'модник'},
+  'Транспорт':           {e:'🚇', c:'#FFC6A8', q:'біп-біп',                  al:'курʼєр'},
+  'Житло':               {e:'🏠', c:'#F7B8B8', q:'дах над головою',          al:'домовик'},
+  "Комунальні й зв'язок":{e:'💡', c:'#AEE5EA', q:'світло не безкоштовне',    al:'електрик'},
+  'Розваги':             {e:'🎉', c:'#F9CBE5', q:'веселощі коштують',        al:'тусовщик'},
+  'Підписки':            {e:'📺', c:'#C3C6FF', q:'тихо списує щомісяця',     al:'тихий шантажист'},
+  'Подорожі':            {e:'✈️', c:'#A6DAF3', q:'втеча з місця злочину',    al:'втікач'},
+  'Освіта':              {e:'📚', c:'#D3EAAD', q:'знання — сила',            al:'ботан'},
+  'Подарунки':           {e:'🎁', c:'#FFC4CF', q:'щедрість карається',       al:'Санта'},
+  'Комісії й відсотки':  {e:'🏦', c:'#D2D2D2', q:'банк теж хоче їсти',       al:'банкір'},
+  'Допомога родині':     {e:'🫶', c:'#FFD3B8', q:'бо родина',                al:'улюблений родич'},
+  'Благодійність':       {e:'💙', c:'#BCD9FF', q:'на перемогу',              al:'меценат'},
+  'Краса й догляд':      {e:'💄', c:'#F9C9DC', q:'красу не сховаєш',         al:'стиліст'},
+  'Техніка':             {e:'📱', c:'#BFE3D0', q:'щомісяця по шматочку',     al:'гаджетоман'},
+  'Спорт':               {e:'🏋️', c:'#B8E0F0', q:'потом і гривнею',          al:'спортсмен'},
+  'Івенти':              {e:'🎟️', c:'#E5D0F5', q:'нетворкінг не безкоштовний', al:'світська левиця'},
+  'Інше':                {e:'🤷', c:'#CDD2DA', q:'загадкові обставини',      al:'темна конячка'},
+  'Без категорії':       {e:'❓', c:'#DDD6C8', q:'особу не встановлено',     al:'невідомий'}
+};
+const INK_PAL = ['#7a5c26','#c8372d','#5e4e36','#b07a3a','#8c6b3f','#9e2820','#56603c','#a8875a','#6b4a2e','#c9a15a','#7d1f18','#857a62'];
+Object.keys(CAT).forEach((k, i) => { CAT[k].c = INK_PAL[i % INK_PAL.length]; });
+const cat = n => CAT[n] || {e:'💸', c:'#857a62', q:'', al:'темна конячка'};
+
+/* ---------- переклад: усі тексти сайту українською й англійською ---------- */
+const CAT_EN = {
+  'Продукти': ['Groceries', "food won't buy itself", "the gang's provider"],
+  'Кафе й ресторани': ['Eating out', 'cook? never heard of it', 'the tempter'],
+  "Здоров'я": ['Health', 'investing in the body', 'the pharmacist'],
+  'Дім і побут': ['Home & household', '“it’s for the house”', 'master of little things'],
+  'Одяг і взуття': ['Clothes & shoes', 'fashion verdict', 'the fashionista'],
+  'Транспорт': ['Transport', 'beep-beep', 'the courier'],
+  'Житло': ['Housing', 'a roof over your head', 'the house spirit'],
+  "Комунальні й зв'язок": ['Utilities & phone', "light isn't free", 'the electrician'],
+  'Розваги': ['Entertainment', 'fun costs money', 'party animal'],
+  'Підписки': ['Subscriptions', 'quietly charges every month', 'silent blackmailer'],
+  'Подорожі': ['Travel', 'escape from the crime scene', 'the fugitive'],
+  'Освіта': ['Education', 'knowledge is power', 'the nerd'],
+  'Подарунки': ['Gifts', 'generosity gets punished', 'Santa'],
+  'Комісії й відсотки': ['Fees & interest', 'the bank wants to eat too', 'the banker'],
+  'Допомога родині': ['Family support', 'because family', 'favourite relative'],
+  'Благодійність': ['Donations', 'for victory', 'the patron'],
+  'Краса й догляд': ['Beauty & care', "beauty can't be hidden", 'the stylist'],
+  'Техніка': ['Tech', 'one slice a month', 'the gadget geek'],
+  'Спорт': ['Sport', 'blood, sweat and dollars', 'the athlete'],
+  'Івенти': ['Events', "networking isn't free", 'the socialite'],
+  'Інше': ['Other', 'mysterious circumstances', 'dark horse'],
+  'Без категорії': ['Uncategorized', 'identity unknown', 'unknown']
+};
+const SUB_EN = {'Пальне':'Fuel','Таксі':'Taxi','Громадський транспорт':'Public transit','Паркування':'Parking','Оренда':'Rent',
+  'Аптека':'Pharmacy','Лікарі':'Doctors','Книги':'Books'};
+// назви, які придумали ми самі (а не банк), — перекладаємо; справжні назви магазинів лишаються як є
+const MERCH_EN = {'Оренда':'Rent','Реймонд':'Raymond','Гризелда':'Griselda','Сільпо':'Silpo'};
+const EN = () => S.lang === 'en';
+const catName = k => EN() ? (CAT_EN[k]?.[0] || SUB_EN[k] || k) : k;
+const catQuip = k => EN() ? (CAT_EN[k]?.[1] ?? '') : cat(k).q;
+const catAlias = k => EN() ? (CAT_EN[k]?.[2] || 'dark horse') : cat(k).al;
+const merch = m => EN() ? (MERCH_EN[m] || m) : m;
+const I = {
+  uk: {
+    docTitle: 'Справа про зниклі гроші', lead: 'Гроші зникали тихо: то в аптеці, то в No Frills, то на стаканчик кави в Tim Hortons. Слідство зібрало докази, допитало свідків і готове назвати винних.',
+    sticky: 'Свідків немає.\nЧеки\u00a0є.', filters: 'Фільтри', schemaLink: '🗂 Як працює база', priv: '🕵️ Режим приватності',
+    privTitle: 'Ховає всі суми — можна робити скріншоти для інших',
+    hBoard: 'Дошка доказів', hForensics: 'Висновок експертизи', hTimeline: 'Хронологія злочинів', hVerdict: 'Вирок', hLog: 'Матеріали справи',
+    hintBoard: 'головні підозрювані — за сумою вкраденого', hintForensics: 'куди саме пішли гроші · натисніть на категорію, щоб побачити покупки',
+    hintTimeline: 'натисніть на місяць, щоб розслідувати тільки його', hintLog: 'усі епізоди, без цензури',
+    searchPh: 'Шукати: No Frills, аптека, Доллі…', searchAria: 'Пошук у матеріалах справи', catAria: 'Категорія', more: 'Показати ще епізоди',
+    caseNo: 'СПРАВА №', title: 'Про зниклі', stampTop: 'Цілком таємно', stampSecret: 'Засекречено',
+    fPeriod: 'Період', fEpisodes: 'Епізодів', fCards: 'Карти', fCounting: 'Рахуємо', fDetective: 'Слідча',
+    countMine: 'тільки мою частку', countAll: 'усе разом',
+    chDates: 'Період', dFrom: 'з', dTo: 'по',
+    chMonth: 'Швидко', chAll: 'Усі', chCard: 'Карта', chCounting: 'Рахуємо', chAllExp: 'Усі витрати', chMine: 'Тільки мої',
+    victim: 'ПОТЕРПІЛИЙ', unsolved: 'Нерозкрита справа', vVictim: 'Потерпілий', vDept: 'Відділ', vDeptVal: 'Розтрати', vCase: 'Справа №', vLoss: 'Збитки', wallet: 'Гаманець', losses: 'Втрати', episodes: 'Епізодів', stolen: 'Вкрадено',
+    prime: 'Головний<br>підозрюваний', noSuspects: 'Підозрюваних немає. Підозріло.',
+    aRepeat: 'рецидивіст', aOneHit: 'грабіжник одного удару', aNight: 'працює під покровом ночі', aPetty: 'дрібний кишеньковий злодій', aOnce: 'гастролер, був лише раз',
+    showCat: 'Показати ці покупки в матеріалах справи', partial: 'неповний місяць',
+    biggest: (m, a, d) => `найгучніший епізод: ${m}, ${a}, ${d}`, quiet: 'тиша, жодного епізоду',
+    hintVerdictAll: 'підсумок по місяцях · оберіть місяць або діапазон дат угорі, щоб побачити розрахунок',
+    hintVerdictRange: 'підсумок по місяцях обраного періоду, все навпіл',
+    hintVerdictMonth: m => `розрахунок за ${monLabel(m)}, все навпіл`,
+    allCats: 'Усі категорії', myShare: p => `моя частка ${p}%`, nothingFound: 'Нічого не знайдено. Чисто.', unknown: 'Невідомо',
+    copied: 'Скопійовано! 📋', privOn: 'Суми засекречено 🕵️', privOff: 'Суми знову видно', hidden: 'приховано',
+    footer: g => `Справу оновлено ${g}. Нова виписка? Імпортуйте її і запустіть <code>python3 build_site.py</code>`
+  },
+  en: {
+    docTitle: 'The Case of the Missing Money', lead: 'The money vanished quietly: at the pharmacy, at No Frills, on a cup of coffee at Tim Hortons. The investigation has gathered evidence, questioned witnesses and is ready to name the culprits.',
+    sticky: 'No witnesses.\nJust\u00a0receipts.', filters: 'Filters', schemaLink: '🗂 How the database works', priv: '🕵️ Privacy mode',
+    privTitle: 'Hides every amount — safe for screenshots',
+    hBoard: 'Evidence board', hForensics: 'Forensic report', hTimeline: 'Timeline of crimes', hVerdict: 'Verdict', hLog: 'Case files',
+    hintBoard: 'prime suspects — by amount stolen', hintForensics: 'where exactly the money went · click a category to see its purchases',
+    hintTimeline: 'click a month to investigate only that one', hintLog: 'every episode, uncensored',
+    searchPh: 'Search: No Frills, pharmacy, Dolly…', searchAria: 'Search the case files', catAria: 'Category', more: 'Show more episodes',
+    caseNo: 'CASE No.', title: 'The missing', stampTop: 'Top secret', stampSecret: 'Classified',
+    fPeriod: 'Period', fEpisodes: 'Episodes', fCards: 'Cards', fCounting: 'Counting', fDetective: 'Detective',
+    countMine: 'only my share', countAll: 'everything',
+    chDates: 'Period', dFrom: 'from', dTo: 'to',
+    chMonth: 'Quick', chAll: 'All', chCard: 'Card', chCounting: 'Counting', chAllExp: 'All expenses', chMine: 'Only mine',
+    victim: 'VICTIM', unsolved: 'Unsolved case file', vVictim: 'Victim', vDept: 'Dept.', vDeptVal: 'Squandering', vCase: 'Case #', vLoss: 'Losses', wallet: 'Wallet', losses: 'Losses', episodes: 'Episodes', stolen: 'Stolen',
+    prime: 'Prime<br>suspect', noSuspects: 'No suspects. Suspicious.',
+    aRepeat: 'repeat offender', aOneHit: 'one-hit robber', aNight: 'works under cover of night', aPetty: 'petty pickpocket', aOnce: 'drifter, came only once',
+    showCat: 'Show these purchases in the case files', partial: 'partial month',
+    biggest: (m, a, d) => `loudest episode: ${m}, ${a}, ${d}`, quiet: 'all quiet, no episodes',
+    hintVerdictAll: 'monthly summary · pick a month or a date range above to see the settlement',
+    hintVerdictRange: 'monthly summary for the selected period, split 50/50',
+    hintVerdictMonth: m => `settlement for ${monLabel(m)}, split 50/50`,
+    allCats: 'All categories', myShare: p => `my share ${p}%`, nothingFound: 'Nothing found. All clean.', unknown: 'Unknown',
+    copied: 'Copied! 📋', privOn: 'Amounts classified 🕵️', privOff: 'Amounts visible again', hidden: 'hidden',
+    footer: g => `Case updated ${g}. New statement? Import it and run <code>python3 build_site.py</code>`
+  }
+};
+I.uk.incomeLink = '💰 Надходження й заощадження'; I.en.incomeLink = '💰 Income & savings';
+const tr = (k, ...a) => { const v = I[S.lang][k] ?? I.uk[k]; return typeof v === 'function' ? v(...a) : v; };
+const FORMS = {ep: {uk: ['епізод', 'епізоди', 'епізодів'], en: ['episode', 'episodes']},
+               acc: {uk: ['рахунок', 'рахунки', 'рахунків'], en: ['account', 'accounts']}};
+function applyStatic(){
+  document.documentElement.lang = S.lang;
+  document.title = tr('docTitle');
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = tr(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = tr(el.dataset.i18nPh); });
+  document.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = tr(el.dataset.i18nTitle); });
+  document.querySelectorAll('[data-i18n-aria]').forEach(el => { el.setAttribute('aria-label', tr(el.dataset.i18nAria)); });
+  document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === S.lang));
+}
+// «фото» для відомих магазинів, щоб підозрювані не були на одне обличчя
+const FACE = {'No Frills':'🛒','Costco':'📦','Uniqlo':'👕','Farm Boy':'🥕','Shoppers Drug Mart':'💄','Rexall':'💊','Whole Foods':'🥑',
+  'Too Good To Go':'🥡','Tim Hortons':'☕',"McDonald's":'🍟','Eataly':'🍝','Loblaws':'🛍️','Dollarama':'🪙','IKEA':'🪑','Rabba':'🥫',
+  'Canadian Tire':'🔧','T&T':'🥟','Etsy':'🎨','Staples':'🖨️','UP Express':'🚆','Freshii':'🥗','Charidise':'🍜','Acai Brazil':'🫐'};
+const face = (m, c) => FACE[m] || cat(c).e;
+// Гравюрні іконки для дошки підозрюваних (замість емоджі): чорнило + латунь + сургуч
+const IC = {
+  cart:'<path d="M6 12h8l7 28h26l6-19H17"/><path d="M20 28h31M23 35h25" stroke-width="1.6"/><circle cx="25" cy="49" r="4" class="k"/><circle cx="44" cy="49" r="4" class="k"/>',
+  box:'<path d="M12 22l20-10 20 10v22L32 54 12 44z" class="p"/><path d="M12 22l20 10 20-10M32 32v22"/><path d="M22 17l20 10v8" stroke="#c9a15a" stroke-width="4"/>',
+  shirt:'<path d="M22 10l-12 8 5 10 6-3v29h22V25l6 3 5-10-12-8c-2 5-6 7-10 7s-8-2-10-7z" class="p"/><path d="M32 17v37" stroke-width="1.4" stroke-dasharray="2 4"/>',
+  dress:'<path d="M26 8h12l-2 14 13 32H15l13-32z" class="p"/><path d="M27 22h10" stroke="#c8372d" stroke-width="4"/>',
+  carrot:'<path d="M14 52l28-28c4-4 1-10-5-7L12 48z" class="b"/><path d="M22 36l4 4M28 30l4 4M18 44l3 3" stroke-width="1.6"/><path d="M42 20l8-10M41 17l1-11M46 23l12-1" stroke="#56603c"/>',
+  greens:'<path d="M20 34a9 9 0 1 1 7-14 9 9 0 0 1 14 1 9 9 0 1 1 4 13z" class="p"/><path d="M27 34l-3 20h14l-3-20" class="b"/><path d="M24 26c3-2 6-2 8 0M36 24c2 2 3 4 3 7" stroke-width="1.6"/>',
+  lipstick:'<path d="M23 34h18v20H23z" class="k"/><path d="M25 34V18l14-7v23z" class="w"/><path d="M21 34h22" stroke="#c9a15a" stroke-width="3"/>',
+  pill:'<g transform="rotate(45 32 32)"><rect x="21" y="8" width="22" height="48" rx="11" class="p"/><path d="M21 32h22v13a11 11 0 0 1-22 0z" class="w"/></g>',
+  bowl:'<path d="M8 30h48c0 14-10 23-24 23S8 44 8 30z" class="p"/><path d="M20 30c0-8 6-13 13-13M32 30c3-8 9-11 16-9" stroke="#56603c"/><circle cx="26" cy="25" r="2.5" class="w"/>',
+  noodles:'<path d="M8 32h48c0 13-10 21-24 21S8 45 8 32z" class="p"/><path d="M40 6L28 32M50 9L34 32"/><path d="M18 32c2-6 6-6 8 0s6 6 8 0" stroke-width="1.6"/><path d="M14 40h36" stroke="#c8372d" stroke-width="2"/>',
+  coffee:'<path d="M14 26h30v14c0 8-6 14-15 14S14 48 14 40z" class="p"/><path d="M44 30h4a6 6 0 0 1 0 12h-4"/><path d="M23 19c-3-4 3-6 0-11M33 19c-3-4 3-6 0-11" stroke-width="1.8"/><path d="M14 33h30" stroke="#c8372d" stroke-width="2.5"/>',
+  fries:'<path d="M22 26l-3-16M28 26l-1-18M34 26l2-17M40 26l4-14" stroke="#c9a15a" stroke-width="4"/><path d="M17 26h30l-4 28H21z" class="w"/>',
+  pizza:'<path d="M12 16c14-7 30-7 40 0L32 56z" class="p"/><path d="M12 16c14-7 30-7 40 0" stroke="#c9a15a" stroke-width="5"/><circle cx="26" cy="26" r="3.5" class="w"/><circle cx="38" cy="27" r="3.5" class="w"/><circle cx="32" cy="40" r="3.5" class="w"/>',
+  bag:'<path d="M14 22h36l-3 32H17z" class="p"/><path d="M24 22c0-8 4-12 8-12s8 4 8 12"/><path d="M16 32h32" stroke="#c8372d" stroke-width="3"/>',
+  coin:'<circle cx="32" cy="32" r="22" class="b"/><circle cx="32" cy="32" r="16" stroke-width="1.6"/><path d="M38 24c-2-3-11-3-12 1s12 5 12 10-11 5-13 1M32 18v28" stroke-width="2.2"/>',
+  chair:'<path d="M20 8v46M44 30v24M20 8h22v22M20 30h28" /><path d="M20 30h24v6H20z" class="b"/>',
+  can:'<path d="M18 14h28v40H18z" class="p"/><ellipse cx="32" cy="14" rx="14" ry="4"/><path d="M18 26h28v16H18z" class="w"/>',
+  wrench:'<path d="M42 8a11 11 0 0 0-10 15L10 45a5 5 0 0 0 7 7l22-22a11 11 0 0 0 15-10l-7 6-6-2-2-6z" class="b"/>',
+  palette:'<path d="M32 9C18 9 8 19 8 32s10 22 22 22c4 0 5-3 3-6s0-6 4-6h7c6 0 12-4 12-12C56 17 46 9 32 9z" class="p"/><circle cx="22" cy="24" r="3.5" class="w"/><circle cx="33" cy="19" r="3.5" class="b"/><circle cx="43" cy="25" r="3.5" class="k"/>',
+  printer:'<path d="M18 26V9h28v17" class="p"/><path d="M10 26h44v18H10z" class="k"/><path d="M18 36h28v19H18z" class="p"/><path d="M23 43h18M23 49h12" stroke-width="1.6"/>',
+  train:'<path d="M18 8h28a4 4 0 0 1 4 4v30a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4V12a4 4 0 0 1 4-4z" class="p"/><path d="M14 28h36M24 46l-6 10M40 46l6 10"/><circle cx="22" cy="37" r="3" class="w"/><circle cx="42" cy="37" r="3" class="w"/>',
+  basket:'<path d="M10 26h44l-6 27H16z" class="b"/><path d="M20 26l8-14M44 26l-8-14M14 36h36M16 44h32" stroke-width="2"/>',
+  house:'<path d="M16 27v26h32V27" class="p"/><path d="M8 30L32 11l24 19"/><path d="M28 53V39h8v14" class="w"/>',
+  bulb:'<path d="M32 8a14 14 0 0 0-8 26v8h16v-8A14 14 0 0 0 32 8z" class="p"/><path d="M26 48h12M28 54h8"/><path d="M29 34l3-8 3 8" stroke="#c9a15a"/>',
+  party:'<path d="M12 54l11-31 20 20z" class="b"/><path d="M17 40l8 8M20 31l12 12" stroke-width="1.6"/><path d="M38 14l3 6M48 18l-5 4M50 30l-7-1M30 10l-1 6"/><circle cx="46" cy="10" r="2.5" class="w"/>',
+  tv:'<path d="M10 18h44v30H10z" class="k"/><path d="M15 23h34v20H15z" class="p"/><path d="M24 8l8 10 8-10M22 54h20"/>',
+  plane:'<path d="M32 6c2 0 4 3 4 7v12l18 10v6l-18-5v11l6 5v4l-10-3-10 3v-4l6-5V36l-18 5v-6l18-10V13c0-4 2-7 4-7z" class="p"/>',
+  books:'<path d="M10 14h12v40H10z" class="w"/><path d="M24 10h12v44H24z" class="b"/><path d="M38 17l11-2 8 37-11 2z" class="p"/>',
+  gift:'<path d="M16 34h32v20H16z" class="p"/><path d="M12 24h40v10H12z" class="w"/><path d="M32 24v30"/><path d="M32 24c-4-10-15-10-13-2 1 3 9 2 13 2zm0 0c4-10 15-10 13-2-1 3-9 2-13 2z"/>',
+  bank:'<path d="M8 24L32 10l24 14z" class="b"/><path d="M14 30v18M24 30v18M40 30v18M50 30v18M10 52h44"/>',
+  heart:'<path d="M32 54S10 40 10 24a11 11 0 0 1 22-4 11 11 0 0 1 22 4c0 16-22 30-22 30z" class="w"/>',
+  phone:'<path d="M20 6h24a3 3 0 0 1 3 3v46a3 3 0 0 1-3 3H20a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3z" class="k"/><path d="M21 13h22v36H21z" class="p"/>',
+  dumbbell:'<path d="M14 32h36" stroke-width="4"/><path d="M8 25h6v14H8zM50 25h6v14h-6z" class="k"/><path d="M14 19h6v26h-6zM44 19h6v26h-6z" class="b"/>',
+  ticket:'<path d="M8 20h48v8a4 4 0 0 0 0 8v8H8v-8a4 4 0 0 0 0-8z" class="b"/><path d="M42 20v24" stroke-dasharray="3 3"/><path d="M16 28h18M16 36h12" stroke-width="1.6"/>',
+  unknown:'<circle cx="28" cy="28" r="16" class="p"/><path d="M40 40l14 14" stroke="#7a5c26" stroke-width="6"/><path d="M23 24a5 5 0 1 1 7 5c-2 1-2 3-2 5M28 38v1"/>',
+  receipt:'<path d="M16 8h32v48l-5-4-5 4-6-4-6 4-5-4-5 4z" class="p"/><path d="M22 18h20M22 26h20M22 34h12"/><path d="M34 44h8" stroke="#c8372d" stroke-width="3"/>',
+  piggy:'<path d="M33 1v6M37 3v5" stroke="#7a5c26" stroke-opacity=".55" stroke-width="1.5"/><path d="M11 43c-4 0-6-3-4-5s5 0 3 2-6 1-7-2" stroke-width="1.8"/><path d="M18 52h7v6a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2zM36 52h7v6a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2z" fill="#d9a093"/><ellipse cx="30" cy="43" rx="20" ry="14" fill="#efc3b6"/><path d="M11 46c6 5 14 7 22 6s14-4 16-8c-1 7-9 13-19 13s-17-5-19-11z" fill="#dfa797" stroke="none"/><ellipse cx="30" cy="43" rx="20" ry="14"/><path d="M48 38h4a3 3 0 0 1 3 3v4a3 3 0 0 1-3 3h-4" fill="#efc3b6"/><circle cx="52" cy="43" r=".9" class="k"/><path d="M38 31l9-4-2 9z" fill="#dfa797"/><circle cx="43.5" cy="38.5" r="1.7" class="k"/><path d="M24 31.5h10" stroke-width="3"/><circle cx="32" cy="17" r="7" class="b"/><circle cx="32" cy="17" r="5" stroke-width="1"/><path d="M34.2 14.6c-.9-1.2-4.3-1.2-4.4.4s4.6 1.4 4.6 3.2-3.5 2-4.6.6M32 12.5v9" stroke-width="1.3"/>',
+  wallet:'<path d="M8 18h40a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H8z" class="k"/><path d="M12 12h30v8H12z" class="p"/><path d="M8 30h48v12H8z" fill="#7d1f18"/><path d="M8 36h48" stroke="#c8372d" stroke-width="2.5"/><circle cx="40" cy="36" r="6" fill="#c8372d" stroke="#7d1f18"/>'
+};
+const EMO = {'🛒':'cart','📦':'box','👕':'shirt','👗':'dress','🥕':'carrot','🥦':'greens','💄':'lipstick','💊':'pill','🥑':'bowl','🥗':'bowl','🫐':'bowl',
+  '🥡':'noodles','🥟':'noodles','🍜':'noodles','🍝':'noodles','☕':'coffee','🍟':'fries','🍕':'pizza','🛍️':'bag','🪙':'coin','💸':'receipt','🪑':'chair',
+  '🥫':'can','🔧':'wrench','🎨':'palette','🖨️':'printer','🚆':'train','🚇':'train','🧺':'basket','🏠':'house','💡':'bulb','🎉':'party','📺':'tv',
+  '✈️':'plane','📚':'books','🎁':'gift','🏦':'bank','🫶':'heart','💙':'heart','📱':'phone','🏋️':'dumbbell','🎟️':'ticket','🤷':'unknown','❓':'unknown','👛':'wallet'};
+const icon = e => `<svg class="ico" viewBox="0 0 64 64" aria-hidden="true">${IC[EMO[e]] || IC.receipt}</svg>`;
+const TILT = [-2.4,1.8,-1.2,2.5,-2,1.3,-1.6,2.1,-.8,1.5];
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nf = new Intl.NumberFormat('uk-UA', {minimumFractionDigits:2, maximumFractionDigits:2});
+const nfEn0 = new Intl.NumberFormat('en-CA', {minimumFractionDigits:2, maximumFractionDigits:2});
+const fmt = n => (S.lang === 'en' ? nfEn0 : nf).format(n);
+// realMoney — завжди справжня сума (для копіювання); money — для показу, у режимі приватності зачорнена
+const realMoney = n => (n < 0 ? '−' : '') + '$' + fmt(Math.abs(n));
+// Друкарська машинка: завжди однаковий шаблон «$XXX.XX», щоб за довжиною не можна було вгадати суму
+const redact = (cur = '$') => `<span class="tw" role="img" aria-label="${tr('hidden')}">${cur}XXX.XX</span>`;
+const money = n => S.priv ? redact() : realMoney(n);
+const CUR = {UAH: '₴', USD: 'US$', PLN: 'zł '};
+const origMoney = (n, c) => (n < 0 ? '−' : '') + (CUR[c] || c + ' ') + fmt(Math.abs(n));
+const money0 = n => S.priv ? redact() : '$' + Math.round(n).toLocaleString(S.lang === 'en' ? 'en-CA' : 'uk-UA');
+const plural = (n, f) => { const a = Math.abs(Math.round(n)) % 100, b = a % 10;
+  return (a > 10 && a < 20) ? f[2] : b === 1 ? f[0] : (b > 1 && b < 5) ? f[1] : f[2]; };
+const pn = (n, kind) => { const f = FORMS[kind][S.lang]; return `${n} ${S.lang === 'en' ? (n === 1 ? f[0] : f[1]) : plural(n, f)}`; };
+const dShort = d => S.lang === 'en' ? `${MON_EN_S[+d.slice(5,7) - 1]} ${+d.slice(8)}` : `${+d.slice(8)} ${MON_S[+d.slice(5,7) - 1]}`;
+const dFull = d => `${d.slice(8)}.${d.slice(5,7)}.${d.slice(0,4)}`;
+const sum = a => Math.round(a.reduce((s, x) => s + x.a, 0) * 100) / 100;
+const night = t => !!t && (t >= '23:00' || t < '05:00');
+const who = h => h || tr('unknown');
+const cap = s => s[0].toUpperCase() + s.slice(1);
+const monLabel = m => (S.lang === 'en' ? MON_EN : MON)[+m.slice(5) - 1];
+function group(arr, f){
+  const m = new Map();
+  for (const x of arr){ const k = f(x); if (!m.has(k)) m.set(k, []); m.get(k).push(x); }
+  return [...m].map(([k, items]) => ({k, items, n:items.length, s:sum(items)})).sort((a, b) => b.s - a.s);
+}
+
+const dates = D.tx.map(x => x.d).sort();
+const MIN = dates[0], MAX = dates[dates.length - 1];
+const months = [...new Set(D.tx.map(x => x.d.slice(0, 7)))].sort();
+// За замовчуванням — поточний місяць; якщо за нього ще немає даних — останній місяць із даними
+const NOW = new Date();
+const THIS_MONTH = `${NOW.getFullYear()}-${String(NOW.getMonth() + 1).padStart(2, '0')}`;
+// Період — діапазон дат S.from…S.to у межах даних.
+// S.month похідний: 'all' — увесь період, 'YYYY-MM' — рівно один місяць, 'range' — довільний діапазон.
+const LO = MIN, HI = MAX;
+const mFrom = m => `${m}-01`;
+const mTo = m => { const [y, mo] = m.split('-').map(Number); return `${m}-${String(new Date(y, mo, 0).getDate()).padStart(2, '0')}`; };
+const clampD = (v, def) => !v ? def : v < LO ? LO : v > HI ? HI : v;
+function setRange(f, t){
+  f = clampD(f, LO); t = clampD(t, HI);
+  if (f > t) [f, t] = [t, f];
+  S.from = f; S.to = t;
+  const m = f.slice(0, 7);
+  S.month = f === LO && t === HI ? 'all'
+    : m === t.slice(0, 7) && f === clampD(mFrom(m), LO) && t === clampD(mTo(m), HI) ? m : 'range';
+}
+const pickMonth = m => m === 'all' ? setRange(LO, HI) : setRange(mFrom(m), mTo(m));
+pickMonth(months.includes(THIS_MONTH) ? THIS_MONTH : (months.at(-1) || 'all'));
+const cards = [...new Set(D.tx.map(x => x.c))].sort((a, b) => a.localeCompare(b, undefined, {numeric: true}));
+function partial(m){
+  const [y, mo] = m.split('-').map(Number);
+  const last = `${m}-${String(new Date(y, mo, 0).getDate()).padStart(2, '0')}`;
+  return MIN > `${m}-01` || MAX < last;
+}
+// «Тільки мої»: зі спільних карт рахуємо лише мою частину (частку іншої людини віднімаємо)
+const mine = x => S.view === 'mine' && x.s ? {...x, a: x.a * (1 - x.s)} : x;   // округлюємо тільки підсумки, не кожну покупку
+const base = ignoreMonth => D.tx.filter(x =>
+  (S.card === 'all' || x.c === S.card) && (ignoreMonth ? x.d >= LO && x.d <= HI : x.d >= S.from && x.d <= S.to)).map(mine);
+
+/* ---------- обкладинка ---------- */
+function renderCover(){
+  const tx = base(), total = sum(tx), ds = tx.map(x => x.d).sort();
+  $('#caseNo').innerHTML = `${tr('caseNo')} ${S.priv ? redact('') : Math.round(total)}-${MAX.slice(2,4)}`;
+  $('#coverStamp').textContent = S.priv ? tr('stampSecret') : tr('stampTop');
+  document.body.classList.toggle('is-private', S.priv);
+  $('#priv').setAttribute('aria-pressed', S.priv);
+  $('#title').innerHTML = `${tr('title')} <span class="hl">${money0(total)}</span>`;
+  const period = S.month === 'all'
+    ? (ds.length ? `${dShort(ds[0])} — ${dShort(ds.at(-1))} ${MAX.slice(0,4)}` : '—')
+    : S.month === 'range' ? `${dShort(S.from)} — ${dShort(S.to)} ${S.to.slice(0,4)}`
+    : `${monLabel(S.month)} ${S.month.slice(0,4)}`;
+  $('#facts').innerHTML = [
+    [tr('fPeriod'), period], [tr('fEpisodes'), tx.length],
+    [tr('fCards'), S.priv ? pn(cards.length, 'acc') : S.card !== 'all' ? S.card : cards.length > 3 ? pn(cards.length, 'acc') : cards.join(', ')], [tr('fCounting'), S.view === 'mine' ? tr('countMine') : tr('countAll')], [tr('fDetective'), D.owner]
+  ].map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('');
+}
+
+/* ---------- фільтри ---------- */
+function renderChips(){
+  const mk = (k, v, label) => `<button class="chip" data-k="${k}" data-v="${esc(v)}" aria-pressed="${S[k] === v}">${esc(label)}</button>`;
+  for (const [id, v] of [['#dFrom', S.from], ['#dTo', S.to]]){
+    const el = $(id); el.min = LO; el.max = HI; el.value = v;
+  }
+  $('#chipsView').innerHTML = D.splitWith
+    ? `<span class="chips-label">${tr('chCounting')}</span>` + mk('view', 'all', tr('chAllExp')) + mk('view', 'mine', tr('chMine')) : '';
+  // у режимі приватності список карт не показуємо
+  $('#chipsCard').innerHTML = cards.length > 1 && !S.priv
+    ? `<span class="chips-label">${tr('chCard')}</span>` + mk('card', 'all', tr('chAll')) + cards.map(c => mk('card', c, c)).join('') : '';
+}
+
+/* ---------- дошка ---------- */
+function alias(s){
+  const c = cat(s.items[0].cat), max = Math.max(...s.items.map(x => x.a)), avg = s.s / s.n;
+  const nn = s.items.filter(x => night(x.t)).length;
+  if (s.n >= 10) return tr('aRepeat');
+  if (max >= 150) return tr('aOneHit');
+  if (s.n >= 2 && nn / s.n >= .5) return tr('aNight');
+  if (s.n >= 3 && avg < 12) return tr('aPetty');
+  if (s.n === 1) return tr('aOnce');
+  return catAlias(s.items[0].cat);
+}
+function renderBoard(){
+  const tx = base(), total = sum(tx);
+  // потерпілий — наліпка «Нерозкрита справа»: фото-ескіз і поля, заповнені від руки
+  const caseNum = `${S.priv ? redact('') : Math.round(total)}-${MAX.slice(2, 4)}`;
+  $('#victim').className = 'victim vlabel';
+  $('#victim').innerHTML = `<span class="pin top"></span>
+    <div class="vl-head"><span>${tr('unsolved')}</span></div>
+    <div class="vl-body">
+      <div class="vl-photo"><svg class="ico" viewBox="0 0 64 64" aria-hidden="true">${IC.piggy}</svg></div>
+      <dl class="vl-fields">
+        <div><dt>${tr('vVictim')}</dt><dd>${tr('wallet')}</dd></div>
+        <div><dt>${tr('vDept')}</dt><dd>${tr('vDeptVal')}</dd></div>
+        <div><dt>${tr('vCase')}</dt><dd>${caseNum}</dd></div>
+        <div><dt>${tr('vLoss')}</dt><dd>${money(total)}</dd></div>
+      </dl>
+    </div><span class="pin bottom"></span>`;
+  const g = group(tx, x => x.m).slice(0, 8), top = g[0]?.s || 1;
+  $('#suspects').innerHTML = g.map((s, i) => {
+    const c = cat(s.items[0].cat);
+    return `<article class="suspect" style="--tilt:${TILT[i % TILT.length]}deg; --h:${Math.max(0, s.s / top).toFixed(3)}">
+      <span class="pin"></span>
+      <div class="mug" style="--mug:${c.c}"><span class="mug-emoji" aria-hidden="true">${icon(face(s.k, s.items[0].cat))}</span><span class="plate">№ ${String(i + 1).padStart(2, '0')}</span></div>
+      <div class="info"><h3>${esc(merch(s.k))}</h3><p class="alias">«${alias(s)}»</p>
+      <dl><div><dt>${tr('episodes')}</dt><dd>${s.n}</dd></div><div><dt>${tr('stolen')}</dt><dd>${money(s.s)}</dd></div></dl></div>
+      ${i === 0 ? `<span class="stamp">${tr('prime')}</span>` : ''}
+    </article>`;
+  }).join('') || `<p class="empty">${tr('noSuspects')}</p>`;
+}
+function drawStrings(){
+  const svg = $('#strings'), board = $('#board');
+  if (window.innerWidth < 700){ svg.innerHTML = ''; return; }
+  const br = board.getBoundingClientRect();
+  svg.setAttribute('viewBox', `0 0 ${br.width} ${br.height}`);
+  const pinV = $('#victim .pin.bottom').getBoundingClientRect();
+  const x1 = pinV.left + pinV.width / 2 - br.left, y1 = pinV.top + pinV.height / 2 - br.top;
+  svg.innerHTML = [...document.querySelectorAll('.suspect .pin')].map(p => {
+    const r = p.getBoundingClientRect();
+    const x2 = r.left + r.width / 2 - br.left, y2 = r.top + r.height / 2 - br.top;
+    return `<path d="M${x1} ${y1} Q${(x1 + x2) / 2} ${(y1 + y2) / 2 + 46} ${x2} ${y2}"/>`;
+  }).join('');
+}
+
+/* ---------- експертиза ---------- */
+function renderForensics(){
+  const tx = base(), total = sum(tx) || 1, g = group(tx, x => x.cat), max = g[0]?.s || 1;
+  $('#forensics').innerHTML = g.map(x => { const c = cat(x.k); return `<li data-cat="${esc(x.k)}" tabindex="0" role="button" title="${tr('showCat')}">
+    <span class="f-emoji" aria-hidden="true">${c.e}</span>
+    <div class="f-name"><b>${esc(catName(x.k))}</b><small>${esc(catQuip(x.k))}</small></div>
+    <div class="f-bar"><span style="width:${Math.max(3, x.s / max * 100)}%;background:${c.c}"></span></div>
+    <div class="f-amt">${money(x.s)}<small>${Math.round(x.s / total * 100)}% · ${pn(x.n, 'ep')}</small></div></li>`; }).join('');
+}
+
+/* ---------- хронологія ---------- */
+function renderTimeline(){
+  const tx = base(true);
+  const g = months.map(m => { const items = tx.filter(x => x.d.startsWith(m)); return {m, items, s:sum(items)}; });
+  const max = Math.max(1, ...g.map(x => x.s));
+  $('#timeline').innerHTML = g.map(x => {
+    const big = x.items.reduce((a, b) => !a || b.a > a.a ? b : a, null);
+    return `<li><button class="t-row" data-month="${x.m}" aria-pressed="${S.month !== 'all' && x.m >= S.from.slice(0, 7) && x.m <= S.to.slice(0, 7)}">
+      <span class="t-m">${cap(monLabel(x.m))}${partial(x.m) ? `<i>${tr('partial')}</i>` : ''}</span>
+      <span class="t-bar"><span style="width:${x.s / max * 100}%"></span></span>
+      <span class="t-s">${money(x.s)}</span>
+      <span class="t-big">${big ? tr('biggest', esc(merch(big.m)), money(big.a), dShort(big.d)) : tr('quiet')}</span>
+    </button></li>`;
+  }).join('');
+}
+
+/* ---------- вирок: розрахунок за обраний місяць, українською або англійською ---------- */
+// Місяць розрахунку = місяць, коли банк списав оплату карти з рахунку.
+const nfEn = new Intl.NumberFormat('en-CA', {minimumFractionDigits:2, maximumFractionDigits:2});
+const L = {
+  uk: {
+    money: n => '$' + nf.format(n),
+    date: dFull,
+    month: m => cap(monLabel(m)),
+    city: D.city?.uk || '',
+    title: 'ПОСТАНОВА',
+    sub: when => `про відшкодування спільних витрат ${when}`,
+    whenAll: 'за весь час',
+    whenMonth: m => `за ${monLabel(m)} ${m.slice(0, 4)}`,
+    periodAll: (a, b) => `з ${a} по ${b}`,
+    p1: (period, owner, cards, paid) => `Слідством встановлено, що ${period} з рахунку ${owner} на погашення спільних карт (${cards}) списано ${paid}.`,
+    p2: (P, share, repaid) => `Згідно з домовленістю «все навпіл» частка ${P} становить ${share}. Уже повернуто: ${repaid}.`,
+    owes: P => `${P} має повернути`, closed: 'Справу закрито',
+    thAll: ['Місяць', 'Списано', 'Половина', 'Залишок'], paidMark: '✓ сплачено',
+    thMonth: ['Списано', 'Карта', 'Сума', 'Половина'], total: 'Разом',
+    reps: 'Повернення',
+    pending: (sum, cards, P, share) => `Ще на розгляді: покупки приблизно на ${sum}, які банк поки не списав (${cards}). Частка ${P} (≈ ${share}) потрапить у розрахунок того місяця, коли банк їх спише.`,
+    empty: m => `У ${MON_LOC[+m.slice(5) - 1]} банк нічого не списував за спільними картами. Розраховуватися нема за що 🎉`,
+    emptyRange: 'За цей період банк нічого не списував за спільними картами. Розраховуватися нема за що 🎉',
+    sign: 'Слідча', stampDue: 'До сплати', stampPaid: 'Сплачено',
+    copyAmount: 'Скопіювати суму', copyMsg: P => `Скопіювати повідомлення для ${P}`,
+    msg: (period, cards, paid, share, repaid, owes) => `Привіт! ${cap(period)} за спільними картами (${cards}) з мого рахунку списано ${paid}. ` +
+      `Твоя половина — ${share}` + (repaid ? `, з неї вже повернуто ${repaid}` : '') + `. До переказу: ${owes} 🙏`
+  },
+  en: {
+    money: n => '$' + nfEn.format(n),
+    date: d => `${MON_EN_S[+d.slice(5, 7) - 1]} ${+d.slice(8)}, ${d.slice(0, 4)}`,
+    month: m => MON_EN[+m.slice(5) - 1],
+    city: D.city?.en || '',
+    title: 'RULING',
+    sub: when => `on the reimbursement of shared expenses ${when}`,
+    whenAll: 'to date',
+    whenMonth: m => `for ${MON_EN[+m.slice(5) - 1]} ${m.slice(0, 4)}`,
+    periodAll: (a, b) => `from ${a} to ${b}`,
+    p1: (period, owner, cards, paid) => `The investigation has established that ${period}, ${paid} was charged to ${owner}'s account to pay off the shared cards (${cards}).`,
+    p2: (P, share, repaid) => `Under the “we split everything 50/50” agreement, ${P}'s share is ${share}. Already paid back: ${repaid}.`,
+    owes: P => `${P} owes`, closed: 'Case closed',
+    thAll: ['Month', 'Charged', 'Half', 'Remaining'], paidMark: '✓ paid',
+    thMonth: ['Charged on', 'Card', 'Amount', 'Half'], total: 'Total',
+    reps: 'Paid back',
+    pending: (sum, cards, P, share) => `Still under investigation: about ${sum} in purchases the bank hasn't charged yet (${cards}). ${P}'s share (≈ ${share}) will go into the settlement for the month the bank charges them.`,
+    empty: m => `In ${MON_EN[+m.slice(5) - 1]} the bank charged nothing for the shared cards. Nothing to settle 🎉`,
+    emptyRange: 'In this period the bank charged nothing for the shared cards. Nothing to settle 🎉',
+    sign: 'Detective', stampDue: 'Payment due', stampPaid: 'Paid',
+    copyAmount: 'Copy amount', copyMsg: P => `Copy message for ${P}`,
+    msg: (period, cards, paid, share, repaid, owes) => `Hi! ${cap(period)}, ${paid} was charged to my account for our shared cards (${cards}). ` +
+      `Your half is ${share}` + (repaid ? `, and ${repaid} of it is already paid back` : '') + `. Left to send: ${owes} 🙏`
+  }
+};
+
+let MESSAGE = '', AMOUNT = '';
+function renderVerdict(){
+  const P = D.splitWith;
+  if (!P){ $('#verdictSec').hidden = true; return; }
+  const t = L[S.lang];
+  // розрахунок іде по місяцях списання: беремо всі місяці, які зачіпає обраний діапазон
+  const rm = [S.from.slice(0, 7), S.to.slice(0, 7)], inM = m => m >= rm[0] && m <= rm[1];
+  const one = S.month !== 'all' && rm[0] === rm[1] ? rm[0] : null;   // рівно один місяць — розрахунок за нього
+  const all = !one, whole = S.month === 'all';
+  const show = n => S.priv ? redact() : t.money(n);
+  const r2 = n => Math.round(n * 100) / 100;
+  const rows = D.debtMonthly.filter(r => inM(r.month));
+  const pays = D.payments.filter(p => inM(p.d.slice(0, 7))).sort((a, b) => a.d.localeCompare(b.d));
+  const reps = D.repayments.filter(r => inM(r.month));
+  const paid = r2(rows.reduce((s, r) => s + r.paid, 0)), share = r2(rows.reduce((s, r) => s + r.share, 0));
+  const repaid = r2(rows.reduce((s, r) => s + r.repaid, 0)), owes = r2(rows.reduce((s, r) => s + r.owes, 0));
+  const when = whole ? t.whenAll : one ? t.whenMonth(one) : t.periodAll(t.date(mFrom(rm[0])), t.date(mTo(rm[1])));
+  const cards = esc(D.splitCards.join(', '));
+  $('#verdictHint').textContent = whole ? tr('hintVerdictAll') : one ? tr('hintVerdictMonth', one) : tr('hintVerdictRange');
+
+  const today = new Date().toISOString().slice(0, 10);
+  const head = `<span class="pin"></span>
+    <p class="doc-meta"><span>${t.city}</span><span>${t.date(today)}</span></p>
+    <h3>${t.title}<small>${esc(t.sub(when))}</small></h3>`;
+  const sign = `<div class="sign"><span>${t.sign}</span><span class="signature">${esc(D.owner)}</span></div>`;
+  const pend = D.pending.reduce((s, p) => s + p.a, 0), pendShare = D.pending.reduce((s, p) => s + p.a * p.share, 0);
+  const pendHtml = pend > 0 && rm[1] >= months.at(-1)
+    ? `<p class="pending">${t.pending(show(pend), esc(D.pending.map(p => p.card).join(', ')), esc(P), show(pendShare))}</p>` : '';
+  $('#verdict').lang = S.lang;
+
+  if (!rows.length){
+    AMOUNT = MESSAGE = '';
+    $('#verdict').innerHTML = `${head}<p class="empty-month">${one ? t.empty(one) : t.emptyRange}</p>${pendHtml}${sign}`;
+    return;
+  }
+
+  const closed = owes <= 0, ds = pays.map(p => p.d);
+  const period = all ? t.periodAll(t.date(ds[0]), t.date(ds.at(-1))) : (S.lang === 'en' ? `in ${t.month(one)} ${one.slice(0, 4)}` : when);
+  AMOUNT = Math.max(0, owes).toFixed(2);
+  MESSAGE = t.msg(period, D.splitCards.join(', '), t.money(paid), t.money(share), repaid > 0 ? t.money(repaid) : '', t.money(Math.max(0, owes)));
+
+  const th = all ? t.thAll : t.thMonth;
+  const table = all
+    ? `<thead><tr><th>${th[0]}</th><th class="num opt">${th[1]}</th><th class="num">${th[2]}</th><th class="num">${th[3]}</th></tr></thead>
+       <tbody>${rows.map(r => `<tr><td>${t.month(r.month)}</td><td class="num opt">${show(r.paid)}</td>
+         <td class="num">${show(r.share)}</td><td class="num${r.owes <= 0 ? ' ok' : ''}">${r.owes <= 0 ? t.paidMark : show(r.owes)}</td></tr>`).join('')}</tbody>
+       <tfoot><tr><td>${t.total}</td><td class="num opt">${show(paid)}</td><td class="num">${show(share)}</td><td class="num">${show(Math.max(0, owes))}</td></tr></tfoot>`
+    : `<thead><tr><th>${th[0]}</th><th class="opt">${th[1]}</th><th class="num">${th[2]}</th><th class="num">${th[3]}</th></tr></thead>
+       <tbody>${pays.map(p => `<tr><td>${t.date(p.d)}</td><td class="opt">${esc(p.card)}</td><td class="num">${show(p.paid)}</td><td class="num">${show(p.share)}</td></tr>`).join('')}</tbody>
+       <tfoot><tr><td>${t.total}</td><td class="opt"></td><td class="num">${show(paid)}</td><td class="num">${show(share)}</td></tr></tfoot>`;
+
+  $('#verdict').innerHTML = `${head}
+    <p>${t.p1(esc(period), esc(D.owner), cards, `<b>${show(paid)}</b>`)}</p>
+    <p>${t.p2(esc(P), `<b>${show(share)}</b>`, `<b>${show(repaid)}</b>`)}</p>
+    <div class="due"><span>${closed ? t.closed : esc(t.owes(P))}</span><strong>${show(Math.max(0, owes))}</strong></div>
+    <table class="pay-table">${table}</table>
+    ${reps.length ? `<p>${t.reps}: ${reps.map(r => `${t.date(r.d)} — ${show(r.a)}`).join('; ')}.</p>` : ''}
+    ${pendHtml}${sign}
+    <span class="stamp">${closed ? t.stampPaid : t.stampDue}</span>
+    <div class="actions">
+      <button class="btn" data-copy="amount">${t.copyAmount}</button>
+      <button class="btn ghost" data-copy="message">${esc(t.copyMsg(P))}</button>
+    </div>`;
+}
+
+/* ---------- матеріали справи ---------- */
+function renderLog(){
+  const q = S.q.trim().toLowerCase();
+  const all = base();
+  // фільтр за категорією: тільки категорії, які є у вибраному місяці/карті
+  const cats = group(all, x => x.cat).map(g => g.k).sort((a, b) => catName(a).localeCompare(catName(b), S.lang));
+  if (S.logCat !== 'all' && !cats.includes(S.logCat)) S.logCat = 'all';
+  $('#catFilter').innerHTML = `<option value="all">${tr('allCats')}</option>` +
+    cats.map(c => `<option value="${esc(c)}"${c === S.logCat ? ' selected' : ''}>${cat(c).e} ${esc(catName(c))}</option>`).join('');
+  const tx = all.filter(x => (S.logCat === 'all' || x.cat === S.logCat) &&
+      (!q || [x.m, x.desc, x.cat, x.sub, x.h, S.priv ? null : x.c].some(v => v && v.toLowerCase().includes(q))))
+    .sort((a, b) => (b.d + (b.t || '')).localeCompare(a.d + (a.t || '')));
+  $('#logCount').innerHTML = `${pn(tx.length, 'ep')} · ${money(sum(tx))}`;
+  $('#log').innerHTML = tx.slice(0, S.shown).map(x => `<li>
+    <span class="l-date">${dShort(x.d)}${x.t ? `<br><small>${x.t}</small>` : ''}</span>
+    <span class="l-emoji" aria-hidden="true">${cat(x.cat).e}</span>
+    <span class="l-main"><b>${esc(merch(x.m))}</b><small>${esc(catName(x.sub || x.cat))} · ${esc(who(x.h))}${S.priv ? '' : ` · ${esc(x.c)}`}${x.s && S.view === 'mine' ? ` · ${tr('myShare', Math.round((1 - x.s) * 100))}` : ''}${night(x.t) ? ' · 🌙' : ''}</small></span>
+    <span class="l-amt${x.a < 0 ? ' neg' : ''}">${money(x.a)}${x.oc && x.oc !== 'CAD' ? `<small class="l-orig">${S.priv ? redact(CUR[x.oc] || x.oc + ' ') : origMoney(x.o, x.oc)}</small>` : ''}</span></li>`).join('') || `<li><span></span><span></span><span class="l-main">${tr('nothingFound')}</span><span></span></li>`;
+  $('#more').hidden = tx.length <= S.shown;
+}
+
+function render(){
+  applyStatic(); renderChips(); renderCover(); renderBoard(); renderForensics(); renderTimeline(); renderVerdict(); renderLog();
+  $('#footer').innerHTML = tr('footer', esc(D.generated));
+  requestAnimationFrame(drawStrings);
+}
+
+/* ---------- події ---------- */
+function toast(t){ const el = $('#toast'); el.textContent = t; el.classList.add('show'); clearTimeout(toast.h); toast.h = setTimeout(() => el.classList.remove('show'), 1800); }
+async function copy(text){
+  try { await navigator.clipboard.writeText(text); }
+  catch { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+  toast(tr('copied'));
+}
+document.addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if (chip && chip.dataset.k){
+    if (chip.dataset.k === 'month') pickMonth(chip.dataset.v); else S[chip.dataset.k] = chip.dataset.v;
+    S.shown = 30;
+    if (chip.dataset.k === 'view') try { localStorage.setItem('view', S.view); } catch {}
+    render(); return;
+  }
+  const row = e.target.closest('.t-row');
+  if (row){ pickMonth(S.month === row.dataset.month ? 'all' : row.dataset.month); S.shown = 30; render(); return; }
+  const cp = e.target.closest('[data-copy]');
+  if (cp){ copy(cp.dataset.copy === 'amount' ? AMOUNT : MESSAGE); return; }
+  const lb = e.target.closest('[data-lang]');
+  if (lb){ S.lang = lb.dataset.lang; try { localStorage.setItem('lang', S.lang); } catch {} render(); return; }
+  if (e.target.closest('#priv')){
+    S.priv = !S.priv;
+    if (S.priv) S.card = 'all';          // фільтр за картою сховано — не лишаємо його ввімкненим
+    try { localStorage.setItem('privacy', S.priv ? '1' : '0'); } catch {}
+    render(); toast(S.priv ? tr('privOn') : tr('privOff')); return;
+  }
+  if (e.target.id === 'more'){ S.shown += 30; renderLog(); }
+});
+// вибір дат: порожнє поле = межа даних; якщо «з» пізніше за «по» — міняємо місцями
+function onDate(){ setRange($('#dFrom').value, $('#dTo').value); S.shown = 30; render(); }
+['#dFrom', '#dTo'].forEach(id => $(id).addEventListener('change', onDate));
+$('#search').addEventListener('input', e => { S.q = e.target.value; S.shown = 30; renderLog(); });
+$('#catFilter').addEventListener('change', e => { S.logCat = e.target.value; S.shown = 30; renderLog(); });
+// клік по категорії в «Висновку експертизи» -> показати її покупки в матеріалах справи
+function openCategory(li){
+  S.logCat = li.dataset.cat; S.shown = 30; renderLog();
+  document.getElementById('h-log').scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+}
+$('#forensics').addEventListener('click', e => { const li = e.target.closest('li[data-cat]'); if (li) openCategory(li); });
+$('#forensics').addEventListener('keydown', e => {
+  const li = e.target.closest('li[data-cat]');
+  if (li && (e.key === 'Enter' || e.key === ' ')){ e.preventDefault(); openCategory(li); }
+});
+let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(drawStrings, 120); });
+document.fonts && document.fonts.ready.then(drawStrings);
+
+render();
+</script>
+</body>
+</html>
